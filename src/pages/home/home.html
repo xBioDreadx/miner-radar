@@ -1,0 +1,74 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>Home</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+  <ion-list *ngFor="let miner of minerProvider.miners; let i = index">
+    <ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col col-12>{{miner.minerName}}</ion-col>
+        </ion-row>
+        <ng-container *ngFor="let gpu of miner.temp">
+          <ion-row>
+            <ion-col col-6>{{gpu.gpuTemperature}}</ion-col>
+            <ion-col col-6>{{gpu.fanSpeed}}</ion-col>
+          </ion-row>
+        </ng-container>
+        <ion-row>
+          <ion-col col-12>Ethereum</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-3>Speed</ion-col>
+          <ion-col col-2>Accept</ion-col>
+          <ion-col col-2>Reject</ion-col>
+          <ion-col col-2>Incorr</ion-col>
+          <ion-col col-3>Ratio</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-3>{{miner.ethereum.speed}}</ion-col>
+          <ion-col col-2>{{miner.ethereum.acceptedShares}}</ion-col>
+          <ion-col col-2>{{miner.ethereum.rejectedShares}}</ion-col>
+          <ion-col col-2>{{miner.ethereum.incorrect}}</ion-col>
+          <ion-col col-3>{{miner.ethereum.ratio}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-12>Decred</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-3>Speed</ion-col>
+          <ion-col col-2>Accept</ion-col>
+          <ion-col col-2>Reject</ion-col>
+          <ion-col col-2>Incorr</ion-col>
+          <ion-col col-3>Ratio</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-3>{{miner.decret.speed}}</ion-col>
+          <ion-col col-2>{{miner.decret.acceptedShares}}</ion-col>
+          <ion-col col-2>{{miner.decret.rejectedShares}}</ion-col>
+          <ion-col col-2>{{miner.decret.incorrect}}</ion-col>
+          <ion-col col-3>{{miner.decret.ratio}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-6>{{miner.pool}}</ion-col>
+          <ion-col col-6>{{miner.uptime}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-2>{{miner.failover}}</ion-col>
+          <ion-col col-2>{{miner.version}}</ion-col>
+          <ion-col col-8>{{miner.comments}}</ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-3><button ion-button (click)="updateMiner(i)">Update</button></ion-col>
+          <ion-col col-3><button ion-button>Change</button></ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-item>
+  </ion-list>
+</ion-content>
