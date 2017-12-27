@@ -52,7 +52,8 @@ export class ConnectionProvider {
       // prior to doing any api requests as well.
       setTimeout(() => {
         if (this.network.type !== Connection.NONE) {
-          this.initPushNotification();
+          //TODO заглушка для виндовса
+         // this.initPushNotification();
         }
       }, 3000);
     });
@@ -243,6 +244,7 @@ export class ConnectionProvider {
 
 
   initPushNotification() {
+
     if (!this.platform.is('cordova')) {
       console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
       return;

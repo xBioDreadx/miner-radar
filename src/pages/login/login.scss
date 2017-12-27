@@ -1,3 +1,19 @@
 page-login {
+  .login_screen {
+    background: -moz-linear-gradient(top, #d0e4f7 0%, #73b1e7 11%, #0a77d5 50%, #539fe1 85%, #87bcea 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(top, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to bottom, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  }
+  .loginButton
+  {
+    background-color:  map-get($colors,"secondary");
+  }
+  .input_item
+  {
 
+  }
+  ion-list.margin_list
+  {
+    margin-top: 33%;
+  }
 }

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import {AlertController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {SettingsProvider} from "../../providers/settings/settings";
 import {Account} from "../../Types/Account";
@@ -25,7 +25,8 @@ export class LoginPage {
               public navParams: NavParams,
               public connectionProvider:ConnectionProvider,
               public settingsProvider:SettingsProvider,
-              public alertController:AlertController) {
+              public alertController:AlertController,
+              public loadingController:LoadingController) {
   }
 
   ionViewDidLoad() {
@@ -34,8 +35,7 @@ export class LoginPage {
 
   login()
   {
-
-    this.connectionProvider.checkConnection().then(()=>{
+   /* this.connectionProvider.checkConnection().then(()=>{
       this.settingsProvider.account = new Account(this.username,this.password);
         this.connectionProvider.login().then(()=>{
           this.navCtrl.setRoot(HomePage,{firstRun:true});
@@ -43,7 +43,17 @@ export class LoginPage {
           console.log("err on getting miners");
           this.alertController.create({message: err, title: "Error while getting miners info"}).present();
         })
-    })
+    })*/
+
+   //делаем вид, что авторизуемся
+    this.loadingController.create({
+      content:'Authorization...',
+      spinner:'crescent',
+      dismissOnPageChange:true
+    }).present();
+    setTimeout(()=>{
+      this.navCtrl.push(HomePage);
+    },3000)
   }
 
 

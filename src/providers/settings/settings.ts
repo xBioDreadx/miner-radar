@@ -51,6 +51,7 @@ export class SettingsProvider {
         }
       }).catch(err=>{
         console.log("error in get keys at natvie storage ",err);
+        resolve(false);
       })
 
     }));

@@ -41,14 +41,16 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       this.statusBar.styleDefault();
       this.push.hasPermission().then((res: any) => {
-
         if (res.isEnabled) {
           console.log('We have permission to send push notifications');
-          this.connectionProvider.initPushNotification();
+          //TODO заглушка для виндовса
+          //this.connectionProvider.initPushNotification();
         } else {
           console.log('We do not have permission to send push notifications');
         }
 
+      }).catch(err=>{
+        console.log("err in push init ",err);
       });
       //make settings initialisation and decide how page will be root
       this.settingsProvider.init().then(result=>{

@@ -86,3 +86,12 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+.transparent
+{
+  background-color: transparent;
+}
+ion-item.transparent
+{
+  background-color: transparent;
+}
