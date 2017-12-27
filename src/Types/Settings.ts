@@ -3,16 +3,11 @@ export class Settings
   private _notification:Boolean;
   private _vibration:Boolean;
   private _sound:Boolean;
-  private _temp:Number;
-  private _checkPeriod:Number;
 
-
-  constructor(notification: Boolean =true, vibration: Boolean=true, sound: Boolean=true, temp: Number=95, checkPeriod: Number=5) {
+  constructor(notification: Boolean =true, vibration: Boolean=true, sound: Boolean=true, ) {
     this._notification = notification;
     this._vibration = vibration;
     this._sound = sound;
-    this._temp = temp;
-    this._checkPeriod = checkPeriod;
   }
 
 
@@ -28,13 +23,7 @@ export class Settings
     return this._sound;
   }
 
-  get temp(): Number {
-    return this._temp;
-  }
 
-  get checkPeriod(): Number {
-    return this._checkPeriod;
-  }
 
 
 
@@ -50,11 +39,4 @@ export class Settings
     this._sound = value;
   }
 
-  set temp(value: Number) {
-    this._temp = value;
-  }
-
-  set checkPeriod(value: Number) {
-    this._checkPeriod = value;
-  }
 }

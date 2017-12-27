@@ -33,6 +33,7 @@ export class SettingsProvider {
         {
           this.nativeStorage.getItem("settings").then(settings => {
             this.settings = settings;
+            console.log("settings readed: ",this.settings);
             this.nativeStorage.getItem("account").then(account => {
               this.account = account;
               resolve(true);
@@ -55,11 +56,17 @@ export class SettingsProvider {
     }));
   }
 
-  saveAccount(acc:Account):Promise<any>
+  saveSetting()
   {
     return new Promise((resolve =>{
-      this.account = acc;
-      this.nativeStorage.setItem("account",acc).then(()=>resolve());
+      this.nativeStorage.setItem("settings",this.settings).then(()=>{ console.log("settings writed: ",this.settings);resolve()});
+    } ));
+  }
+
+  saveAccount():Promise<any>
+  {
+    return new Promise((resolve =>{
+      this.nativeStorage.setItem("account",this.account).then(()=>resolve());
     } ));
   }
 

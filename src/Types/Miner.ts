@@ -1,123 +1,54 @@
-export class Miner
-{
-  private _minerId:String;
-  private _minerName:String;
-  private _temp:[{
-    gpuTemperature:Number,
-    fanSpeed:Number
-  }];
-  private _ethereum:{
-    speed:String,
-    acceptedShares:Number,
-    rejectedShares:Number,
-    incorrect:Number,
-    ratio:Number
-  };
-  private _decret:{
-    speed:String,
-    acceptedShares:Number,
-    rejectedShares:Number,
-    incorrect:Number,
-    ratio:Number
-  };
-  private _uptime:String;
-  private _pool:String;
-  private _failover:Number;
-  private _version:String;
-  private _comments:String;
 
 
-  constructor(minerId: String, minerName: String, temp: [{ gpuTemperature: Number; fanSpeed: Number }], uptime: String, ethereum: { speed: String; acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number }, decret: { speed: String; acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number }, pool: String, failover: Number, version: String, comments: String) {
-    this._minerId = minerId;
-    this._minerName = minerName;
-    this._temp = temp;
-    this._uptime = uptime;
-    this._ethereum = ethereum;
-    this._decret = decret;
-    this._pool = pool;
-    this._failover = failover;
-    this._version = version;
-    this._comments = comments;
-  }
+import {MinerSettings} from "./MinerSettings";
 
-  get minerId(): String {
-    return this._minerId;
-  }
+export class Miner {
+  public minerId: String;
+  public minerName: String;
+  public gpus: any[];
+  public uptime: String;
+  public pool: String;
+  public invalidEth: Number;
+  public invalidDcr: Number;
+  public switchesEth: Number;
+  public switchesDcr: Number;
+  public version: String;
+  public status: Boolean;
+  public comments: String;
 
-  set minerId(value: String) {
-    this._minerId = value;
-  }
+  public speedEth: Number;//'8.1 MH/s'
+  public acceptedSharesEth: Number;
+  public rejectedSharesEth: Number;
+  public detaliedEth: Number[];
 
-  get minerName(): String {
-    return this._minerName;
-  }
-
-  set minerName(value: String) {
-    this._minerName = value;
-  }
+  public speedDcr: Number;//'8.1 MH/s'
+  public acceptedSharesDcr: Number;
+  public rejectedSharesDcr: Number;
+  public detaliedDcr: Number[];
+  public minerSettings:MinerSettings;
 
 
-  get temp(): [{ gpuTemperature: Number; fanSpeed: Number }] {
-    return this._temp;
-  }
-
-  set temp(value: [{ gpuTemperature: Number; fanSpeed: Number }]) {
-    this._temp = value;
-  }
-
-  get uptime(): String {
-    return this._uptime;
-  }
-
-  set uptime(value: String) {
-    this._uptime = value;
-  }
-
-  get ethereum(): {  speed:String,acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number } {
-    return this._ethereum;
-  }
-
-  set ethereum(value: {  speed:String,acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number }) {
-    this._ethereum = value;
-  }
-
-  get decret(): {  speed:String,acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number } {
-    return this._decret;
-  }
-
-  set decret(value: {  speed:String,acceptedShares: Number; rejectedShares: Number; incorrect: Number; ratio: Number }) {
-    this._decret = value;
-  }
-
-  get pool(): String {
-    return this._pool;
-  }
-
-  set pool(value: String) {
-    this._pool = value;
-  }
-
-  get failover(): Number {
-    return this._failover;
-  }
-
-  set failover(value: Number) {
-    this._failover = value;
-  }
-
-  get version(): String {
-    return this._version;
-  }
-
-  set version(value: String) {
-    this._version = value;
-  }
-
-  get comments(): String {
-    return this._comments;
-  }
-
-  set comments(value: String) {
-    this._comments = value;
+  constructor(minerId: String, minerName: String, gpus: any[], uptime: String, pool: String, invalidEth: Number, invalidDcr: Number, switchesEth: Number, switchesDcr: Number, version: String, status: Boolean, comments: String, speedEth: Number, acceptedSharesEth: Number, rejectedSharesEth: Number, detaliedEth: Number[], speedDcr: Number, acceptedSharesDcr: Number, rejectedSharesDcr: Number, detaliedDcr: Number[],minerSettings:MinerSettings) {
+    this.minerId = minerId;
+    this.minerName = minerName;
+    this.gpus = gpus;
+    this.uptime = uptime;
+    this.pool = pool;
+    this.invalidEth = invalidEth;
+    this.invalidDcr = invalidDcr;
+    this.switchesEth = switchesEth;
+    this.switchesDcr = switchesDcr;
+    this.version = version;
+    this.status = status;
+    this.comments = comments;
+    this.speedEth = speedEth;
+    this.acceptedSharesEth = acceptedSharesEth;
+    this.rejectedSharesEth = rejectedSharesEth;
+    this.detaliedEth = detaliedEth;
+    this.speedDcr = speedDcr;
+    this.acceptedSharesDcr = acceptedSharesDcr;
+    this.rejectedSharesDcr = rejectedSharesDcr;
+    this.detaliedDcr = detaliedDcr;
+    this.minerSettings = minerSettings;
   }
 }

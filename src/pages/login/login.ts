@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, NavParams } from 'ionic-angular';
+import {AlertController, NavController, NavParams} from 'ionic-angular';
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {SettingsProvider} from "../../providers/settings/settings";
 import {Account} from "../../Types/Account";
@@ -24,7 +24,8 @@ export class LoginPage {
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
               public connectionProvider:ConnectionProvider,
-              public settingsProvider:SettingsProvider) {
+              public settingsProvider:SettingsProvider,
+              public alertController:AlertController) {
   }
 
   ionViewDidLoad() {
@@ -36,8 +37,11 @@ export class LoginPage {
 
     this.connectionProvider.checkConnection().then(()=>{
       this.settingsProvider.account = new Account(this.username,this.password);
-        this.connectionProvider.getStoredMiners().then(()=>{
-          this.navCtrl.setRoot(HomePage);
+        this.connectionProvider.login().then(()=>{
+          this.navCtrl.setRoot(HomePage,{firstRun:true});
+        }).catch(err=>{
+          console.log("err on getting miners");
+          this.alertController.create({message: err, title: "Error while getting miners info"}).present();
         })
     })
   }

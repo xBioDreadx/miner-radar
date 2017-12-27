@@ -1,8 +1,10 @@
-import {Component, NgZone} from '@angular/core';
-import { NavController } from 'ionic-angular';
+import {Component, NgZone, ViewChild} from '@angular/core';
+import {AlertController, NavController, NavParams, Platform,Nav} from 'ionic-angular';
 import {SettingsProvider} from "../../providers/settings/settings";
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {MinerProvider} from "../../providers/miner/miner";
+import {MinerSettingsPage} from "../miner-settings/miner-settings";
+
 
 @Component({
   selector: 'page-home',
@@ -10,29 +12,48 @@ import {MinerProvider} from "../../providers/miner/miner";
 })
 export class HomePage {
 
-  constructor(public navCtrl: NavController,
-              public settingsProvider:SettingsProvider,
+  constructor(public settingsProvider:SettingsProvider,
               public connectionProvider:ConnectionProvider,
               public minerProvider:MinerProvider,
-              public zone:NgZone) {
+              public zone:NgZone,
+              public alertController:AlertController,
+              public navParams:NavParams,
+              public platform:Platform,
+              public nav:NavController) {
+this.platform.ready().then(()=>{
+  /*if(this.navParams.get("firstRun")==undefined)
+  {
+    this.updateInformation();
+  }*/
+})
 
-    if(this.settingsProvider.account.username!=null)
-    {
-      this.connectionProvider.checkConnection().then(()=>{
-        this.connectionProvider.getStoredMiners()
-      })
-    }
   }
 
   updateMiner(i)
   {
     this.connectionProvider.checkConnection().then(()=>{
-      this.connectionProvider.updateMiner(this.minerProvider.miners[i].minerId).then(result=>{
+      this.connectionProvider.updateSingleMiner(this.minerProvider.miners[i].minerId).then(result=>{
         this.zone.run(()=>{
           this.minerProvider.miners[i] = result;
         })
       })
     })
+  }
+
+  updateInformation()
+  {
+    console.log("click");
+    this.connectionProvider.checkConnection().then(()=>{
+      this.connectionProvider.getStoredMiners().catch(err=>{
+        console.log("err on getting miners");
+        this.alertController.create({message: err, title: "Error while getting miners info"}).present();
+      })
+    })
+  }
+
+  changeMiner(i)
+  {
+    this.nav.push(MinerSettingsPage,{"miner":i});
   }
 
 }

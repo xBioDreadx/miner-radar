@@ -1,6 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { ErrorHandler, NgModule } from '@angular/core';
-import { IonicApp, IonicErrorHandler, IonicModule } from 'ionic-angular';
+import {IonicApp, IonicErrorHandler, IonicModule, NavController} from 'ionic-angular';
 
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
@@ -15,13 +15,20 @@ import {HTTP} from "@ionic-native/http";
 import {Network} from "@ionic-native/network";
 import {NativeStorage} from "@ionic-native/native-storage";
 import {LoginPage} from "../pages/login/login";
+import {SettingsPage} from "../pages/settings/settings";
+import {LocalNotifications} from "@ionic-native/local-notifications";
+import {Vibration} from "@ionic-native/vibration";
+import {Push} from "@ionic-native/push";
+import {MinerSettingsPage} from "../pages/miner-settings/miner-settings";
 
 @NgModule({
   declarations: [
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage,
+    MinerSettingsPage
   ],
   imports: [
     BrowserModule,
@@ -32,7 +39,9 @@ import {LoginPage} from "../pages/login/login";
     MyApp,
     HomePage,
     ListPage,
-    LoginPage
+    LoginPage,
+    SettingsPage,
+    MinerSettingsPage
   ],
   providers: [
     StatusBar,
@@ -43,7 +52,10 @@ import {LoginPage} from "../pages/login/login";
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     SettingsProvider,
     ConnectionProvider,
-    MinerProvider
+    MinerProvider,
+    LocalNotifications,
+    Vibration,
+    Push
   ]
 })
 export class AppModule {}

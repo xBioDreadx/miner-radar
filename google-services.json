@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "1034639132392",
+    "firebase_url": "https://miner-radar.firebaseio.com",
+    "project_id": "miner-radar",
+    "storage_bucket": "miner-radar.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1034639132392:android:4d973ce8611ae520",
+        "android_client_info": {
+          "package_name": "io.ionic.starter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1034639132392-b8vatnh87vehl918mnuoth3pt0jih691.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-rDtNwbOk9zZaoaCq9SXDz2SQkw0AXr4"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
