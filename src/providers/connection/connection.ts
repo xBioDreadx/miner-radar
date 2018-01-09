@@ -251,14 +251,13 @@ export class ConnectionProvider {
     }
     const options: PushOptions = {
       android: {
-        //senderID: 1034639132392
+        senderID: "1034639132392"
       },
       ios: {
         alert: 'true',
         badge: false,
         sound: 'true'
-      },
-      windows: {}
+      }
     };
     const pushObject: PushObject = this.push.init(options);
 

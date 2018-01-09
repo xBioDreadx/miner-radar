@@ -5,8 +5,6 @@ import {IonicApp, IonicErrorHandler, IonicModule, NavController} from 'ionic-ang
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
-
-import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SettingsProvider } from '../providers/settings/settings';
 import { ConnectionProvider } from '../providers/connection/connection';
@@ -44,7 +42,6 @@ import {MinerSettingsPage} from "../pages/miner-settings/miner-settings";
     MinerSettingsPage
   ],
   providers: [
-    StatusBar,
     SplashScreen,
     HTTP,
     Network,
