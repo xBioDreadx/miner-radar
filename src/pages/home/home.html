@@ -3,77 +3,36 @@
     <button ion-button menuToggle>
       <ion-icon name="menu"></ion-icon>
     </button>
-    <ion-title>Home<button ion-button icon-start style="float: right"  (click)="updateInformation()">
-      <ion-icon name="md-sync"></ion-icon>
-    </button>
-    </ion-title>
-
+    <ion-title>Miners List</ion-title>
   </ion-navbar>
 </ion-header>
 
 <ion-content padding>
 
-  <ion-list *ngFor="let miner of minerProvider.miners; let i = index">
-    <ion-item>
+
+  <ion-card *ngFor="let miner of minerProvider.miners; let i = index" (click)="minerInfo(i)">
+
+    <ion-card-header text-wrap>
+      {{miner.minerName}} <span class="mainer_status" [ngClass]="{'online':miner.status}"></span>
+    </ion-card-header>
+
+    <ion-card-content class="miner_item" text-wrap>
+      <!-- Add card content here! -->
       <ion-grid>
         <ion-row>
-          <ion-col col-12>{{miner.minerName}} - {{miner.status ? "Online" :"Offline"}}</ion-col>
-        </ion-row>
-        <ng-container *ngFor="let gpu of miner.gpus">
-          <ion-row>
-            <ion-col col-6>{{gpu.gpuTemperature}}C</ion-col>
-            <ion-col col-6>{{gpu.fanSpeed}}%</ion-col>
-          </ion-row>
-        </ng-container>
-        <ion-row>
-          <ion-col col-12>Ethereum</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-3>Speed</ion-col>
-          <ion-col col-2>Accept</ion-col>
-          <ion-col col-2>Reject</ion-col>
-          <ion-col col-2>Incorr</ion-col>
-          <ion-col col-2>Switches</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-3>{{miner.speedEth | number:'2.2-2'}}Mh/s</ion-col>
-          <ion-col col-2>{{miner.acceptedSharesEth}}</ion-col>
-          <ion-col col-2>{{miner.rejectedSharesEth}}</ion-col>
-          <ion-col col-2>{{miner.invalidEth}}</ion-col>
-          <ion-col col-2>{{miner.switchesEth}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-12>Decred</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-3>Speed</ion-col>
-          <ion-col col-2>Accept</ion-col>
-          <ion-col col-2>Reject</ion-col>
-          <ion-col col-2>Incorr</ion-col>
-          <ion-col col-3>Switches</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-3>{{miner.speedDcr | number:'2.2-2'}}Mh/s</ion-col>
-          <ion-col col-2>{{miner.acceptedSharesDcr}}</ion-col>
-          <ion-col col-2>{{miner.rejectedSharesDcr}}</ion-col>
-          <ion-col col-2>{{miner.invalidDcr}}</ion-col>
-          <ion-col col-3>{{miner.switchesDcr}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-6>{{miner.pool}}</ion-col>
-          <ion-col col-6>{{miner.uptime}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-12>{{miner.version}}</ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col col-12>{{miner.comments}}</ion-col>
-        </ion-row>
-
-        <ion-row>
-          <ion-col col-3><button ion-button (click)="changeMiner(i)">Change</button></ion-col>
+          <ion-col col-6 class="miner_speed">
+            {{miner.speedEth | number:'2.2-2'}}Mh/s Eth
+          </ion-col>
+          <ion-col col-6 class="miner_speed">
+            {{miner.speedDcr | number:'2.2-2'}}Mh/s Dcr
+          </ion-col>
         </ion-row>
       </ion-grid>
-    </ion-item>
-  </ion-list>
+    </ion-card-content>
+  </ion-card>
 </ion-content>
+<ion-footer>
+  <button  ion-button icon-right clear class="icon-settings" >
+    <ion-icon  ios="ios-settings" md="md-settings" class="app_settings"></ion-icon>Application settings
+  </button>
+</ion-footer>

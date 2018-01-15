@@ -4,6 +4,7 @@ import {SettingsProvider} from "../../providers/settings/settings";
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {MinerProvider} from "../../providers/miner/miner";
 import {MinerSettingsPage} from "../miner-settings/miner-settings";
+import {MinerInfoPage} from "../miner-info/miner-info";
 
 
 @Component({
@@ -55,5 +56,12 @@ this.platform.ready().then(()=>{
   {
     this.nav.push(MinerSettingsPage,{"miner":i});
   }
+
+
+  minerInfo(i)
+    {
+      this.nav.push(MinerInfoPage,{"miner":i});
+    }
+
 
 }

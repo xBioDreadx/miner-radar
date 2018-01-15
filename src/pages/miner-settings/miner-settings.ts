@@ -23,7 +23,7 @@ export class MinerSettingsPage {
               public minerProvider:MinerProvider,
               public connectionProvider:ConnectionProvider,
               public toastController:ToastController) {
-    this.miner = minerProvider.miners[this.navParams.get("miner")];
+    this.miner = this.navParams.get("miner");
   }
 
   ionViewDidLoad() {

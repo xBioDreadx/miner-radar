@@ -1,3 +1,40 @@
 page-home {
+  .miner_item {
+    font-size: 18px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  .miner_name {
+    font-size: 22px;
+    font-weight: 700;
+  }
+  .miner_speed {
+    font-size: 18px;
+    color: #32db64;
+  }
 
+
+
+  .mainer_status {
+    width: 25px;
+    height: 25px;
+    border: 1px solid black;
+    border-radius: 50px;
+    background-color: #ff1616;
+    display: block;
+    float: right;
+  }
+  .mainer_status.online
+  {
+    background-color: #32db64;
+  }
+  .icon-settings{
+    margin: 5px auto;
+    display: block;
+  }
+
+  .app_settings
+  {
+    margin-right: 5px;
+  }
 }

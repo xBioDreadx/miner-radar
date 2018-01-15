@@ -53,7 +53,7 @@ export class ConnectionProvider {
       setTimeout(() => {
         if (this.network.type !== Connection.NONE) {
           //TODO заглушка для виндовса
-         // this.initPushNotification();
+          // this.initPushNotification();
         }
       }, 3000);
     });
@@ -112,13 +112,14 @@ export class ConnectionProvider {
       })
     })
   }
+
   getStoredMiners(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
       this.http.get(this.connectionString + "/getMiners", this.settingsProvider.account, {}).then(result => {
         let answer = JSON.parse(result.data);
         if (answer.error == null) {
-          console.log("result.data. is ",answer);
+          console.log("result.data. is ", answer);
           this.minerProvider.setMiners(answer.miners).then(() => {
             this.cancelLoading();
             resolve();
@@ -143,7 +144,8 @@ export class ConnectionProvider {
       })
     })
   }
-/*not using*/
+
+  /*not using*/
   updateSingleMiner(minerId): Promise<any> {
     return new Promise(resolve => {
       this.presentLoading();
@@ -185,33 +187,35 @@ export class ConnectionProvider {
     })
   }
 
-  postMinersSettings(miner): Promise<any>  {
-    return new Promise((resolve,reject) => {
-      if(this.isOnline())
-      {
+  postMinersSettings(miner): Promise<any> {
+    return new Promise((resolve, reject) => {
+      if (this.isOnline()) {
         let settings = new MinerSettings(miner.enableAlert,
           miner.enableTemperatureAlert,
           miner.overheatTemperature,
           miner.enableSpeedEthAlert,
           miner.minimumEthSpeed,
           miner.enableSpeedDcrAlert,
-          miner.minimumDcrSpeed);
+          miner.minimumDcrSpeed,
+          miner.enableFanSpeedAlert,
+          miner.minimumFanSpeedAlert,
+          miner.maximumFanSpeedAlert,
+        );
         this.presentLoading();
-        this.http.post(this.connectionString+"/updateMinerSettings",
+        this.http.post(this.connectionString + "/updateMinerSettings",
           {
             username: this.settingsProvider.account.username,
-            password:this.settingsProvider.account.password,
-            minerId:miner.minerId,
-            settings:settings
-          },{}).then(answer=>{
+            password: this.settingsProvider.account.password,
+            minerId: miner.minerId,
+            settings: settings
+          }, {}).then(answer => {
+          this.cancelLoading();
+          if (answer.error == null && answer.data.error == null)
+            resolve(true);
+          else {
             this.cancelLoading();
-            if(answer.error == null&&answer.data.error ==null)
-              resolve(true);
-          else
-            {
-              this.cancelLoading();
-              reject(answer.data.message!=null?answer.data.message:answer.error);
-            }
+            reject(answer.data.message != null ? answer.data.message : answer.error);
+          }
         }).catch(err => {
           this.cancelLoading();
           reject(err);
@@ -224,10 +228,6 @@ export class ConnectionProvider {
       else
         reject("device is offline");
     });
-
-
-
-
   }
 
 
@@ -295,7 +295,7 @@ export class ConnectionProvider {
       } else {
         //if user NOT using app and push notification comes
         //TODO: Your logic on click of push notification directly
-      ///  this.nav.setRoot(HomePage);
+        ///  this.nav.setRoot(HomePage);
         console.log('Push notification clicked');
       }
     });

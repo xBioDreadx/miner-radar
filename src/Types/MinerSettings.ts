@@ -6,8 +6,20 @@ export  class  MinerSettings{
   public minimumEthSpeed:number = 1;
   public enableSpeedDcrAlert:boolean = true;
   public minimumDcrSpeed:number = 1;
+  public enableFanSpeedAlert:boolean= true;
+  public minimumFanSpeedAlert:number= 0;
+  public maximumFanSpeedAlert:number = 100;
 
-  constructor(enableAlert: boolean, enableTemperatureAlert: boolean, overheatTemperature: number, enableSpeedEthAlert: boolean, minimumEthSpeed: number, enableSpeedDcrAlert: boolean, minimumDcrSpeed: number) {
+  constructor(enableAlert: boolean,
+              enableTemperatureAlert: boolean,
+              overheatTemperature: number,
+              enableSpeedEthAlert: boolean,
+              minimumEthSpeed: number,
+              enableSpeedDcrAlert: boolean,
+              minimumDcrSpeed: number,
+              enableFanSpeedAlert:boolean,
+              minimumFanSpeedAlert:number,
+              maximumFanSpeedAlert:number) {
     this.enableAlert = enableAlert;
     this.enableTemperatureAlert = enableTemperatureAlert;
     this.overheatTemperature = overheatTemperature;
@@ -15,5 +27,9 @@ export  class  MinerSettings{
     this.minimumEthSpeed = minimumEthSpeed;
     this.enableSpeedDcrAlert = enableSpeedDcrAlert;
     this.minimumDcrSpeed = minimumDcrSpeed;
+    this.enableFanSpeedAlert =enableFanSpeedAlert;
+    this.minimumFanSpeedAlert = minimumFanSpeedAlert;
+    this.maximumFanSpeedAlert = maximumFanSpeedAlert;
+
   }
 }

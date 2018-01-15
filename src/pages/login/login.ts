@@ -53,7 +53,7 @@ export class LoginPage {
     }).present();
     setTimeout(()=>{
       this.navCtrl.push(HomePage);
-    },3000)
+    },500)
   }
 
 
