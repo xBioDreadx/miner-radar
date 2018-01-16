@@ -1,3 +1,36 @@
 page-miner-settings {
+ .settings_card
+ {
+   margin-left: 3px;
+   margin-right: 3px;
+   width: calc(100% - 6px);
+ }
+  .settings_label
+  {
+    width: 80%;
+    display: block;
+    max-width: 80%;
+  }
+  .settings_add_button
+  {
+    display: block;
+    margin: 10px auto;
+  }
+  .footer
+  {
+    background-color: white;
+  }
 
+  .settings_enable_notification
+  {
+    color: #0a77d5;
+    float: right;
+    font-size: 18px;
+  }
+  .settings_disable_notification
+  {
+    float: right;
+    font-size: 18px;
+  }
 }
+

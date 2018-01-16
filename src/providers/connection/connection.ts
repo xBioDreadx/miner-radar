@@ -10,7 +10,9 @@ import {Push, PushObject, PushOptions} from "@ionic-native/push";
 import {HomePage} from "../../pages/home/home";
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import {Vibration} from "@ionic-native/vibration";
-import {MinerSettings} from "../../Types/MinerSettings";
+import {HttpClient, HttpErrorResponse, HttpRequest, HttpEventType} from "@angular/common/http";
+import 'rxjs/add/operator/retry';
+import {ResponseInterface} from "../../Types/ResponseInterface";
 
 declare const Connection;
 
@@ -36,7 +38,8 @@ export class ConnectionProvider {
               public platform: Platform,
               public push: Push,
               public localNotifications: LocalNotifications,
-              public vibration: Vibration) {
+              public vibration: Vibration,
+              public httpClient: HttpClient) {
     /*let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
       let alert = alertController.create({
         message: "You lost Internet connection!",
@@ -82,13 +85,10 @@ export class ConnectionProvider {
   login(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.http.get(this.connectionString + "/minerLogin", this.settingsProvider.account, {}).then(result => {
-        console.log(" before parse ", result.data);
-        let answer = JSON.parse(result.data);
+      this.get(this.connectionString + "/minerLogin", this.settingsProvider.account).then(answer => {
         console.log("answer is ", answer);
-        if (answer.error == null) {
           this.settingsProvider.saveAccount();
-          this.minerProvider.setMiners(answer.miners).then(() => {
+          this.minerProvider.setMiners(answer['miners']).then(() => {
             this.cancelLoading();
             resolve();
           }).catch(err => {
@@ -96,19 +96,10 @@ export class ConnectionProvider {
             this.cancelLoading();
             reject(err);
           })
-        }
-        else {
-          this.cancelLoading();
-          reject(answer.error);
-        }
-
       }).catch(err => {
         this.cancelLoading();
         reject(err);
         console.log("err in retrieve ", err);
-        console.log(err.status);
-        console.log(err.error); // error message as string
-        console.log(err.headers);
       })
     })
   }
@@ -116,11 +107,9 @@ export class ConnectionProvider {
   getStoredMiners(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.http.get(this.connectionString + "/getMiners", this.settingsProvider.account, {}).then(result => {
-        let answer = JSON.parse(result.data);
-        if (answer.error == null) {
+      this.get(this.connectionString + "/getMiners", this.settingsProvider.account).then(answer => {
           console.log("result.data. is ", answer);
-          this.minerProvider.setMiners(answer.miners).then(() => {
+          this.minerProvider.setMiners(answer['miners']).then(() => {
             this.cancelLoading();
             resolve();
           }).catch(err => {
@@ -128,12 +117,6 @@ export class ConnectionProvider {
             this.cancelLoading();
             reject(err);
           })
-        }
-        else {
-          this.cancelLoading();
-          reject(answer.error);
-        }
-
       }).catch(err => {
         this.cancelLoading();
         reject(err);
@@ -165,23 +148,20 @@ export class ConnectionProvider {
   }
 
   /**
-   * ывфывфывфыыв
-   * @param {String} deviceID ывывфыввфы
-   * @returns {Promise<any>} мааафф
+   *
+   * @param {String} deviceID
+   * @returns {Promise<any>}
    */
   sendDeviceId(deviceID: String): Promise<any> {
     return new Promise(resolve => {
       if (this.isOnline()) {
-        this.http.get(this.connectionString + "/setDeviceId", {
+        this.get(this.connectionString + "/setDeviceId", {
           deviceID: deviceID
-        }, {}).then(result => {
-          resolve(JSON.parse(result.data));
+        }).then(result => {
+          resolve(result);
         }).catch(err => {
           resolve();
           console.log(err);
-          console.log(err.status);
-          console.log(err.error); // error message as string
-          console.log(err.headers);
         })
       }
     })
@@ -190,32 +170,17 @@ export class ConnectionProvider {
   postMinersSettings(miner): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.isOnline()) {
-        let settings = new MinerSettings(miner.enableAlert,
-          miner.enableTemperatureAlert,
-          miner.overheatTemperature,
-          miner.enableSpeedEthAlert,
-          miner.minimumEthSpeed,
-          miner.enableSpeedDcrAlert,
-          miner.minimumDcrSpeed,
-          miner.enableFanSpeedAlert,
-          miner.minimumFanSpeedAlert,
-          miner.maximumFanSpeedAlert,
-        );
+        let settings = miner.minerSettings;
         this.presentLoading();
-        this.http.post(this.connectionString + "/updateMinerSettings",
+        this.post(this.connectionString + "/updateMinerSettings",
           {
             username: this.settingsProvider.account.username,
             password: this.settingsProvider.account.password,
             minerId: miner.minerId,
             settings: settings
-          }, {}).then(answer => {
+          }).then(answer => {
           this.cancelLoading();
-          if (answer.error == null && answer.data.error == null)
             resolve(true);
-          else {
-            this.cancelLoading();
-            reject(answer.data.message != null ? answer.data.message : answer.error);
-          }
         }).catch(err => {
           this.cancelLoading();
           reject(err);
@@ -242,9 +207,56 @@ export class ConnectionProvider {
     this.loader.dismiss();
   }
 
+  post(link: string, data?: Object): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.httpClient.post<ResponseInterface>(link, data).retry(2).subscribe((result) => {
+        console.log("result of post to "+link+" is: ",result);
+          if (result.status)
+            resolve(JSON.parse(result.data));
+          else
+            reject(result.reason);
+        },
+        (err: HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.log('An error occurred:', err.error.message);
+            reject(err.error.message)
+          } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+            reject(err.error)
+          }
+        });
+    })
+
+  }
+
+  get(link, data?) {
+    return new Promise((resolve, reject) => {
+      this.httpClient.get<ResponseInterface>(link, data).retry(2).subscribe(<ResponseInterface>(result) => {
+          if (result.status)
+            resolve(JSON.parse(result.data));
+          else
+            reject(result.reason);
+        },
+        (err: HttpErrorResponse) => {
+          if (err.error instanceof Error) {
+            // A client-side or network error occurred. Handle it accordingly.
+            console.log('An error occurred:', err.error.message);
+            reject(err.error.message)
+          } else {
+            // The backend returned an unsuccessful response code.
+            // The response body may contain clues as to what went wrong,
+            console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+            reject(err.error)
+          }
+        });
+    })
+  }
+
 
   initPushNotification() {
-
     if (!this.platform.is('cordova')) {
       console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
       return;

@@ -5,7 +5,7 @@ import {SettingsProvider} from "../settings/settings";
 import {LocalNotifications} from '@ionic-native/local-notifications';
 import {Platform} from "ionic-angular";
 import {Vibration} from "@ionic-native/vibration";
-import {MinerSettings} from "../../Types/MinerSettings";
+import {MinerSetting} from "../../Types/MinerSetting";
 
 /*
   Generated class for the MinerProvider provider.
@@ -21,9 +21,7 @@ export class MinerProvider {
   constructor(public zone: NgZone,
               public settingsProvider: SettingsProvider) {
     console.log('Hello MinerProvider Provider');
-    this.miners.push(new Miner(
-      "fake Miner_1",
-      "test miner 1",
+    this.miners.push(new Miner("fake Miner_1", "test miner 1",
       [{
         gpuTemperature: 60,
         fanSpeed:78
@@ -53,8 +51,12 @@ export class MinerProvider {
       22,
       3,
       [0.4,1.1,1.2],
-      new MinerSettings(true,true,115,true,5,false,0.2,false,25,85)
-      ))
+    [ new MinerSetting("Temperature","°C",true,-1,115),
+      new MinerSetting("Fan Speed","%",false,25,95),
+      new MinerSetting("Eth Speed","MH/s",true,2.5,-1),
+      new MinerSetting("Dcr Speed","MH/s",true,0.5,-1)
+    ]
+    ));
 
     this.miners.push(new Miner(
       "fake Miner_2",
@@ -88,7 +90,11 @@ export class MinerProvider {
       12,
       6,
       [1.4,0.5,1.5],
-      new MinerSettings(true,true,115,true,5,false,0.2,true,25,95)
+      [ new MinerSetting("Temperature","°C",true,-1,115),
+        new MinerSetting("Fan Speed","%",false,25,95),
+        new MinerSetting("Eth Speed","MH/s",true,2.5,-1),
+        new MinerSetting("Dcr Speed","MH/s",true,0.5,-1)
+      ]
     ))
     console.log("miners created",this.miners);
   }

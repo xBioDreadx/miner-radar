@@ -12,50 +12,35 @@
 
 </ion-header>
 <ion-content padding>
+
+
   <ion-list>
-    <ion-item>
-      <ion-label>Enable Alerts</ion-label>
-      <ion-toggle [ngModel]="miner.minerSettings.enableAlert"
-                  checked="{{miner.minerSettings.enableAlert}}"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Alert on Overheat</ion-label>
-      <ion-toggle [ngModel]="miner.minerSettings.enableTemperatureAlert"
-                  checked="{{miner.minerSettings.enableTemperatureAlert}}"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Overheat Temperature <ion-badge color="danger">{{miner.minerSettings.overheatTemperature}}</ion-badge></ion-label>
-
-      <ion-range min="50" max="120" step="2" [(ngModel)]="miner.minerSettings.overheatTemperature">
-        <ion-icon small range-left name="md-thermometer" color="danger">50</ion-icon>
-        <ion-icon range-right name="md-thermometer" color="danger">120</ion-icon>
-      </ion-range>
-    </ion-item>
-    <ion-item>
-      <ion-label>Enable Alerts</ion-label>
-      <ion-toggle [ngModel]="miner.minerSettings.enableFanSpeedAlert"
-                  checked="{{miner.minerSettings.enableFanSpeedAlert}}"></ion-toggle>
-    </ion-item>
-
-    <ion-item>
-      <ion-label>Alert on low speed of Eth</ion-label>
-      <ion-toggle [ngModel]="miner.minerSettings.enableSpeedEthAlert"
-                  checked="{{miner.minerSettings.enableSpeedEthAlert}}"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Minimum speed of Eth</ion-label>
-      <ion-input [ngModel]="miner.minerSettings.minimumEthSpeed" [disabled]="!miner.minerSettings.enableSpeedEthAlert"></ion-input>
-    </ion-item>
-    <ion-item>
-      <ion-label>Alert on low speed of Dcr</ion-label>
-      <ion-toggle [ngModel]="miner.minerSettings.enableSpeedDcrAlert"
-                  checked="{{miner.minerSettings.enableSpeedDcrAlert}}"></ion-toggle>
-    </ion-item>
-    <ion-item>
-      <ion-label>Minimum speed of Dcr</ion-label>
-      <ion-input [disabled]="!miner.minerSettings.enableSpeedDcrAlert" [ngModel]="miner.minerSettings.minimumDcrSpeed"></ion-input>
-    </ion-item>
+    <ng-container *ngFor="let setting of miner.minerSettings;let iter = index">
+      <ion-card *ngIf="setting.enabled==true" class="settings_card">
+        <ion-card-header>{{setting.name}}
+          <ion-icon name="notifications-off" class="settings_disable_notification" *ngIf="setting.mute" (click)="switchMute(iter)"></ion-icon>
+          <ion-icon name="notifications" class="settings_enable_notification" *ngIf="!setting.mute" (click)="switchMute(iter)"> </ion-icon>
+        </ion-card-header>
+        <ion-card-content>
+          <ion-item>
+            <ion-label class="settings_label">Value must be more than, {{setting.type}}</ion-label>
+            <ion-input [ngModel]="(setting.low_value>-1)?setting.low_value:''"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label class="settings_label">Value must be low, than, {{setting.type}}</ion-label>
+            <ion-input [ngModel]="(setting.high_value>-1)?setting.high_value:''"></ion-input>
+          </ion-item>
+          <ion-item><button ion-button (click)="cancel()">Delete notification</button></ion-item>
+        </ion-card-content>
+      </ion-card>
+    </ng-container>
   </ion-list>
-  <button ion-button (click)="cancel()">Cancel</button>
-  <button ion-button (click)="saveSettings()">Save</button>
+
+
+
+
+
 </ion-content>
+<ion-footer class="footer">
+  <button ion-button  class="settings_add_button" (click)="addSettings()">Add new notification</button>
+</ion-footer>

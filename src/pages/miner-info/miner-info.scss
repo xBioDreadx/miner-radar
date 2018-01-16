@@ -1,0 +1,113 @@
+page-miner-info {
+  .restart_button, .reboot_button, .commands_button {
+    /*padding: 3px;*/
+    @media screen and (orientation: portrait) and (max-device-width: 360px) {
+     padding: 5px;
+    }
+  }
+
+  .notification_button {
+    font-size: 24px;
+    padding-left: 18px;
+    height: 40px;
+  }
+  .uptime_row {
+    font-size: 24px;
+    padding: 10px;
+    text-align: center;
+    border-top: 1px solid #222222;
+    border-bottom: 1px solid #222222;
+  }
+  .alert_bg {
+    background-color: #ff1616;
+  }
+  .legend_row {
+    background-color: whitesmoke;
+    font-size: 22px;
+    border-bottom: 1px solid #222222;
+  }
+  .gpu_row {
+    font-size: 20px;
+  }
+  .gpu_row:nth-child(odd) {
+    background-color: whitesmoke;
+  }
+  .alert_icon {
+    float: right;
+  }
+  .expansion_row {
+    font-size: 20px;
+  }
+  .expansion_row:nth-child(even) {
+    background-color: whitesmoke;
+  }
+  .expansion_header{
+    font-size: 20px;
+  }
+  .additional_info_row,.additional_info_content
+  {
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .additional_info_row:nth-child(odd) {
+    background-color: whitesmoke;
+
+  }
+  .miner_info_footer
+  {
+    border-top:1px solid #0a77d5;
+    background-color: white;
+  }
+
+  .miner_info_card
+  {
+    width: 100%;
+    margin: 10px 0 0;
+  }
+
+
+  .temperature_span
+  {
+    background: #2bdb54; /* Old browsers */
+    background: -moz-linear-gradient(left, #2bdb54 0%, #f4e516 68%, #ff1616 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #2bdb54 0%,#f4e516 68%,#ff1616 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #2bdb54 0%,#f4e516 68%,#ff1616 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2bdb54', endColorstr='#ff1616',GradientType=1 ); /* IE6-9 */
+    height: 100%;
+    display: block;
+    width: 100%;
+  }
+  .fan_span
+  {
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#2c38e0+0,9d17ef+69,f418e2+100 */
+    background: #2c38e0; /* Old browsers */
+    background: -moz-linear-gradient(left, #2c38e0 0%, #9d17ef 69%, #f418e2 100%); /* FF3.6-15 */
+    background: -webkit-linear-gradient(left, #2c38e0 0%,#9d17ef 69%,#f418e2 100%); /* Chrome10-25,Safari5.1-6 */
+    background: linear-gradient(to right, #2c38e0 0%,#9d17ef 69%,#f418e2 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#2c38e0', endColorstr='#f418e2',GradientType=1 ); /* IE6-9 */
+    height: 100%;
+    display: block;
+    width: 100%;
+  }
+  .temperature_graph {
+    float: right;
+    background-color: white;
+    height: 100%;
+    display: block;
+    width: 100%;
+  }
+
+  .temperature_row
+  {
+    font-size: 22px;
+  }
+  .fan_row
+  {
+    margin-bottom: 10px;
+  }
+  .rate_item:nth-child(odd)
+  {
+    background-color: whitesmoke;
+  }
+}

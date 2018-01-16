@@ -1,6 +1,6 @@
 
 
-import {MinerSettings} from "./MinerSettings";
+import {MinerSetting} from "./MinerSetting";
 
 export class Miner {
   public minerId: String;
@@ -25,7 +25,7 @@ export class Miner {
   public acceptedSharesDcr: Number;
   public rejectedSharesDcr: Number;
   public detaliedDcr: Number[];
-  public minerSettings:MinerSettings;
+  public minerSettings:MinerSetting[];
 
   /**
    *
@@ -49,9 +49,9 @@ export class Miner {
    * @param {Number} acceptedSharesDcr - принятые Dcr
    * @param {Number} rejectedSharesDcr - отклонённые Dcr
    * @param {Number[]} detaliedDcr - детальная информация о скорости Dcr на каждую видеокарту
-   * @param {MinerSettings} minerSettings - настройки оповещения майнера
+   * @param {MinerSetting[]} minerSettings - настройки оповещения майнера
    */
-  constructor(minerId: String, minerName: String, gpus: any[], uptime: String, pool: String, invalidEth: Number, invalidDcr: Number, switchesEth: Number, switchesDcr: Number, version: String, status: Boolean, comments: String, speedEth: Number, acceptedSharesEth: Number, rejectedSharesEth: Number, detaliedEth: Number[], speedDcr: Number, acceptedSharesDcr: Number, rejectedSharesDcr: Number, detaliedDcr: Number[],minerSettings:MinerSettings) {
+  constructor(minerId: String, minerName: String, gpus: any[], uptime: String, pool: String, invalidEth: Number, invalidDcr: Number, switchesEth: Number, switchesDcr: Number, version: String, status: Boolean, comments: String, speedEth: Number, acceptedSharesEth: Number, rejectedSharesEth: Number, detaliedEth: Number[], speedDcr: Number, acceptedSharesDcr: Number, rejectedSharesDcr: Number, detaliedDcr: Number[],minerSettings:MinerSetting[]) {
     this.minerId = minerId;
     this.minerName = minerName;
     this.gpus = gpus;

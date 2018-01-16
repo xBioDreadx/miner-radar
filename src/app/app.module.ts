@@ -20,6 +20,8 @@ import {MinerSettingsPage} from "../pages/miner-settings/miner-settings";
 import {MinerInfoPage} from "../pages/miner-info/miner-info";
 import {MatExpansionModule} from '@angular/material/expansion';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {ApplicationSettingsPage} from "../pages/application-settings/application-settings";
+import {HttpClient} from "@angular/common/http";
 
 @NgModule({
   declarations: [
@@ -29,7 +31,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     LoginPage,
     SettingsPage,
     MinerSettingsPage,
-    MinerInfoPage
+    MinerInfoPage,
+    ApplicationSettingsPage
   ],
   imports: [
     BrowserModule,
@@ -45,7 +48,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     LoginPage,
     SettingsPage,
     MinerSettingsPage,
-    MinerInfoPage
+    MinerInfoPage,
+    ApplicationSettingsPage
   ],
   providers: [
     SplashScreen,
@@ -58,7 +62,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
     MinerProvider,
     LocalNotifications,
     Vibration,
-    Push
+    Push,
+    HttpClient
   ]
 })
 export class AppModule {}

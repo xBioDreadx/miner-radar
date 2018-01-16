@@ -1,0 +1,141 @@
+<!--
+  Generated template for the MinerInfoPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+  <ion-navbar>
+    <ion-title>{{miner.minerName}}<span class="mainer_status" [ngClass]="{'online':miner.status}"></span></ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+  <ion-grid>
+    <ng-container *ngFor="let gpu of miner.gpus; let i= index">
+      <ion-row class="temperature_row">
+        <ion-col col-1>{{i+1}}</ion-col>
+        <ion-col col-7><span class="temperature_span"><span class="temperature_graph" [ngStyle]="{'max-width': (gpu.gpuTemperature<110)?((100-((gpu.gpuTemperature/110)*100))+'%'):'0%' }"></span></span>
+        </ion-col>
+        <ion-col col-3>{{gpu.gpuTemperature}} °C</ion-col>
+        <ion-col col-1><ion-icon name="ios-thermometer-outline"></ion-icon></ion-col>
+      </ion-row>
+      <ion-row class="fan_row">
+        <ion-col col-1></ion-col>
+        <ion-col col-7><span class="fan_span"><span class="temperature_graph"
+                                                            [ngStyle]="{'max-width': (gpu.fanSpeed<100)?(100 - gpu.fanSpeed+'%'):'0%' }"></span></span>
+        </ion-col>
+        <ion-col col-3>{{gpu.fanSpeed}}%</ion-col>
+        <ion-col col-1><ion-icon name="md-aperture"></ion-icon></ion-col>
+      </ion-row>
+    </ng-container>
+    <ion-row>
+      <ion-col col-12 class="uptime_row">Uptime: {{miner.uptime/60| number:'2.0-0'}}:{{miner.uptime%60 |
+        number:'2.0-0'}}
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <mat-expansion-panel>
+    <mat-expansion-panel-header class="expansion_header">
+      Etherium {{miner.speedEth}} MH/s
+    </mat-expansion-panel-header>
+    <ion-grid>
+      <ion-row class="expansion_row">
+        <ion-col col-6>Speed</ion-col>
+        <ion-col col-6>{{miner.speedEth}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-6>Accepted</ion-col>
+        <ion-col col-6>{{miner.acceptedSharesEth}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-6>Rejected</ion-col>
+        <ion-col col-6>{{miner.rejectedSharesEth}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-6>Incorrect</ion-col>
+        <ion-col col-6>{{miner.invalidEth}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-6>Switches</ion-col>
+        <ion-col col-6>{{miner.switchesEth}}</ion-col>
+      </ion-row>
+    </ion-grid>
+
+    <mat-expansion-panel>
+      <mat-expansion-panel-header class="expansion_header">
+      Rates
+      </mat-expansion-panel-header>
+        <ion-list>
+          <ion-item class="rate_item" *ngFor="let eth of miner.detaliedEth">{{eth}}  MH/s</ion-item>
+        </ion-list>
+    </mat-expansion-panel>
+
+  </mat-expansion-panel>
+
+  <mat-expansion-panel>
+    <mat-expansion-panel-header class="expansion_header">
+      Decred {{miner.speedDcr}} MH/s
+    </mat-expansion-panel-header>
+    <ion-grid>
+      <ion-row class="expansion_row">
+        <ion-col col-8>Speed</ion-col>
+        <ion-col col-4>{{miner.speedDcr}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-8>Accepted Shares</ion-col>
+        <ion-col col-4>{{miner.acceptedSharesDcr}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-8>Rejected Shares</ion-col>
+        <ion-col col-4>{{miner.rejectedSharesDcr}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-8>Incorrect Shares</ion-col>
+        <ion-col col-4>{{miner.invalidDcr}}</ion-col>
+      </ion-row>
+      <ion-row class="expansion_row">
+        <ion-col col-8>Switches</ion-col>
+        <ion-col col-4>{{miner.switchesDcr}}</ion-col>
+      </ion-row>
+    </ion-grid>
+    <mat-expansion-panel>
+      <mat-expansion-panel-header class="expansion_header">
+        Rates
+      </mat-expansion-panel-header>
+      <ion-list>
+        <ion-item class="rate_item" *ngFor="let dcr of miner.detaliedDcr">{{dcr}}  MH/s</ion-item>
+      </ion-list>
+    </mat-expansion-panel>
+  </mat-expansion-panel>
+  <ion-card class="miner_info_card">
+    <ion-card-header class="additional_info_row">Pool</ion-card-header>
+    <ion-card-content class="additional_info_content">{{miner.pool}}</ion-card-content>
+  </ion-card>
+  <ion-card class="miner_info_card">
+    <ion-card-header class="additional_info_row">Comments</ion-card-header>
+    <ion-card-content class="additional_info_content">{{miner.comments}}</ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer class="miner_info_footer">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-3>
+        <button class="restart_button" ion-button>Restart</button>
+      </ion-col>
+      <ion-col col-3>
+        <button class="reboot_button" ion-button>Reboot</button>
+      </ion-col>
+      <ion-col col-4>
+        <button class="commands_button" ion-button>Commands</button>
+      </ion-col>
+      <ion-col col-2>
+        <button class="notification_button" ion-button clear (click)="minerNotifications()">
+          <ion-icon name="notifications"></ion-icon>
+        </button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-footer>
