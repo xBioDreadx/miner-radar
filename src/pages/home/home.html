@@ -10,7 +10,7 @@
 <ion-content padding>
 
 
-  <ion-card *ngFor="let miner of minerProvider.miners; let i = index" (click)="minerInfo(i)">
+  <ion-card *ngFor="let miner of minerProvider.miners; let i = index" (click)="minerInfo(i)" class="miner_item">
 
     <ion-card-header text-wrap>
      <ion-grid>
@@ -25,7 +25,7 @@
      </ion-grid>
     </ion-card-header>
 
-    <ion-card-content class="miner_item" text-wrap>
+    <ion-card-content  text-wrap>
       <!-- Add card content here! -->
       <ion-grid>
         <ion-row>

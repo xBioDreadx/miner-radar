@@ -111,12 +111,12 @@ export class ConnectionProvider {
         }).catch(err => {
           console.log("error in login ", err);
           this.cancelLoading();
-          this.alertController.create({message: err, title: "Error while login"}).present();
+          this.alertController.create({message: err, title: "Error while login",buttons:[{text:"ok"}]}).present();
           reject(err);
         })
       }).catch(err => {
         this.cancelLoading();
-        this.alertController.create({message: err, title: "Error while login"}).present();
+        this.alertController.create({message: err, title: "Error while login",buttons:[{text:"ok"}]}).present();
         reject(err);
         console.log("err in retrieve ", err);
       })
@@ -134,7 +134,7 @@ export class ConnectionProvider {
         }).catch(err => {
           console.log("error in setting miners ", err);
           this.cancelLoading();
-          this.alertController.create({message: err, title: "Error while getting miners info"}).present();
+          this.alertController.create({message: err, title: "Error while getting miners info",buttons:[{text:"ok"}]}).present();
           reject(err);
         })
       }).catch(err => {
@@ -151,14 +151,14 @@ export class ConnectionProvider {
   /*not using*/
   updateSingleMiner(minerId): Promise<any> {
     return new Promise(resolve => {
-      this.presentLoading();
+      //this.presentLoading();
       this.http.get(this.connectionString, {
         account: this.settingsProvider.account,
         minerId: minerId
       }, {}).then(result => {
         resolve(JSON.parse(result.data));
       }).catch(err => {
-        this.cancelLoading();
+        //this.cancelLoading();
         resolve();
         console.log(err.status);
         console.log(err.error); // error message as string

@@ -33,7 +33,7 @@ export class SettingsProvider {
             this.account = new Account(account._username,account._password);
             if (keys.indexOf("settings") > -1) {
               this.nativeStorage.getItem("settings").then(settings => {
-                this.settings = settings;
+                this.settings =settings;
                 console.log("settings readed: ", this.settings);
                 resolve(true);
               }).catch(err => {

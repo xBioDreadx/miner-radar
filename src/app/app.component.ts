@@ -58,6 +58,7 @@ export class MyApp {
           }).catch(err => {
             console.log("err in push init ", err);
           });
+
           if (this.connectionProvider.token != null) {
             this.connectionProvider.getStoredMiners().then(() => {
               this.nav.setRoot(HomePage)
@@ -67,9 +68,7 @@ export class MyApp {
           }
           else {
             this.connectionProvider.login().then(() => {
-              this.connectionProvider.getStoredMiners().then(() => {
-                this.nav.setRoot(HomePage)
-              })
+              this.nav.setRoot(HomePage)
             }).catch(() => {
               this.nav.setRoot(LoginPage)
             })
