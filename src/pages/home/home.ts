@@ -27,20 +27,6 @@ this.platform.ready().then(()=>{
 
   }
 
-  /**
-   * не используется
-   * @param i
-   */
-  updateMiner(i)
-  {
-    this.connectionProvider.checkConnection().then(()=>{
-      this.connectionProvider.updateSingleMiner(this.minerProvider.miners[i].minerId).then(result=>{
-        this.zone.run(()=>{
-          this.minerProvider.miners[i] = result;
-        })
-      })
-    })
-  }
 
   /**
    * не используется

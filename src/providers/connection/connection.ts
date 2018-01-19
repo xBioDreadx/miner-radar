@@ -42,13 +42,7 @@ export class ConnectionProvider {
               public vibration: Vibration,
               public httpClient: HttpClient,
               public alertController:AlertController) {
-    /*let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
-      let alert = alertController.create({
-        message: "You lost Internet connection!",
-        title: "Warning!"
-      });
-      alert.present();
-    });*/
+
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
       console.log('network connected!');
@@ -148,24 +142,6 @@ export class ConnectionProvider {
     })
   }
 
-  /*not using*/
-  updateSingleMiner(minerId): Promise<any> {
-    return new Promise(resolve => {
-      //this.presentLoading();
-      this.http.get(this.connectionString, {
-        account: this.settingsProvider.account,
-        minerId: minerId
-      }, {}).then(result => {
-        resolve(JSON.parse(result.data));
-      }).catch(err => {
-        //this.cancelLoading();
-        resolve();
-        console.log(err.status);
-        console.log(err.error); // error message as string
-        console.log(err.headers);
-      })
-    })
-  }
 
   /**
    *
@@ -175,7 +151,7 @@ export class ConnectionProvider {
   sendDeviceId(deviceID: String): Promise<any> {
     return new Promise(resolve => {
       if (this.isOnline()) {
-        this.get(this.connectionString + "/setDeviceId", {
+        this.post(this.connectionString + "/setDeviceId", {
           token: this.token,
           deviceID: deviceID
         }).then(result => {
@@ -191,17 +167,17 @@ export class ConnectionProvider {
   postMinersSettings(miner): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.isOnline()) {
-        this.presentLoading();
+        //this.presentLoading();
         this.post(this.connectionString + "/updateMinerSettings",
           {
             token: this.token,
             minerId: miner.minerId,
             settings: miner.minerSettings
           }).then(answer => {
-          this.cancelLoading();
+         // this.cancelLoading();
           resolve(true);
         }).catch(err => {
-          this.cancelLoading();
+        //  this.cancelLoading();
           reject(err);
           console.log("err in retrieve ", err);
           console.log(err.status);
