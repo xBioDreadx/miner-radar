@@ -1,0 +1,33 @@
+<!--
+  Generated template for the ApplicationSettingsPage page.
+
+  See http://ionicframework.com/docs/components/#navigation for more info on
+  Ionic pages and navigation.
+-->
+<ion-header>
+
+  <ion-navbar>
+    <ion-title>ApplicationSettings</ion-title>
+  </ion-navbar>
+
+</ion-header>
+
+
+<ion-content padding>
+  <ion-list>
+    <ion-item>
+      <ion-label class="settings_label">Notifications</ion-label>
+      <ion-toggle [ngModel]="settingsProvider.settings.notification" checked="{{settingsProvider.settings.notification}}"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label class="settings_label">Sound</ion-label>
+      <ion-toggle [ngModel]="settingsProvider.settings.notification" checked="{{settingsProvider.settings.sound}}"></ion-toggle>
+    </ion-item>
+    <ion-item>
+      <ion-label class="settings_label">Vibration</ion-label>
+      <ion-toggle [ngModel]="settingsProvider.settings.notification" checked="{{settingsProvider.settings.vibration}}"></ion-toggle>
+    </ion-item>
+  </ion-list>
+
+
+</ion-content>

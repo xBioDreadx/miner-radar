@@ -28,21 +28,26 @@ export class SettingsProvider {
     return new Promise((resolve => {
       this.nativeStorage.keys().then(keys => {
         if (keys.indexOf("account") > -1) {
-          if (keys.indexOf("settings") > -1) {
-            this.nativeStorage.getItem("settings").then(settings => {
-              this.settings = settings;
-              console.log("settings readed: ", this.settings);
-            }).catch(err => {
-              console.log("error in get settings ", err);
-            });
-            this.nativeStorage.getItem("account").then(account => {
-              console.log("account readed: ", account);
-              this.account = account;
-              resolve(true);
-            }).catch(err => {
-              console.log("error in get account ", err);
-            })
-          }
+          this.nativeStorage.getItem("account").then(account => {
+            console.log("account readed: ", account);
+            this.account = account;
+            if (keys.indexOf("settings") > -1) {
+              this.nativeStorage.getItem("settings").then(settings => {
+                this.settings = settings;
+                console.log("settings readed: ", this.settings);
+                resolve(true);
+              }).catch(err => {
+                console.log("error in get settings ", err);
+              });
+            }
+            else {
+              this.settings = new Settings();
+              resolve(false);
+            }
+          }).catch(err => {
+            console.log("error in get account ", err);
+            resolve(false);
+          })
         }
         else {
           this.settings = new Settings();
@@ -67,7 +72,10 @@ export class SettingsProvider {
 
   saveAccount(): Promise<any> {
     return new Promise((resolve => {
-      this.nativeStorage.setItem("account", this.account).then(() => {console.log("account saved");resolve()});
+      this.nativeStorage.setItem("account", this.account).then(() => {
+        console.log("account saved");
+        resolve()
+      });
     } ));
   }
 
