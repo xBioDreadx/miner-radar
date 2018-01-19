@@ -13,7 +13,16 @@
   <ion-card *ngFor="let miner of minerProvider.miners; let i = index" (click)="minerInfo(i)">
 
     <ion-card-header text-wrap>
-      {{miner.minerName}} <span class="mainer_status" [ngClass]="{'online':miner.status}"></span>
+     <ion-grid>
+       <ion-row>
+         <ion-col col-10>
+           {{miner.minerName}}
+         </ion-col>
+         <ion-col col-2>
+           <span class="mainer_status" [ngClass]="{'online':miner.status}"></span>
+         </ion-col>
+       </ion-row>
+     </ion-grid>
     </ion-card-header>
 
     <ion-card-content class="miner_item" text-wrap>

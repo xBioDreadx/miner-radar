@@ -30,7 +30,7 @@ export class SettingsProvider {
         if (keys.indexOf("account") > -1) {
           this.nativeStorage.getItem("account").then(account => {
             console.log("account readed: ", account);
-            this.account = account;
+            this.account = new Account(account._username,account._password);
             if (keys.indexOf("settings") > -1) {
               this.nativeStorage.getItem("settings").then(settings => {
                 this.settings = settings;
@@ -42,7 +42,7 @@ export class SettingsProvider {
             }
             else {
               this.settings = new Settings();
-              resolve(false);
+              resolve(true);
             }
           }).catch(err => {
             console.log("error in get account ", err);

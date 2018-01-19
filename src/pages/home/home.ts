@@ -22,10 +22,7 @@ export class HomePage {
               public platform:Platform,
               public nav:NavController) {
 this.platform.ready().then(()=>{
-  /*if(this.navParams.get("firstRun")==undefined)
-  {
-    this.updateInformation();
-  }*/
+
 })
 
   }

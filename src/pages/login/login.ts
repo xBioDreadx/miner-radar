@@ -22,11 +22,8 @@ export class LoginPage {
   public password:String="";
 
   constructor(public navCtrl: NavController,
-              public navParams: NavParams,
               public connectionProvider:ConnectionProvider,
-              public settingsProvider:SettingsProvider,
-              public alertController:AlertController,
-              public loadingController:LoadingController) {
+              public settingsProvider:SettingsProvider) {
   }
 
   ionViewDidLoad() {
@@ -39,10 +36,9 @@ export class LoginPage {
       this.settingsProvider.account = new Account(this.username,this.password);
       console.log("created new account ",this.settingsProvider.account);
         this.connectionProvider.login().then(()=>{
-          this.navCtrl.setRoot(HomePage,{firstRun:true});
+          this.navCtrl.setRoot(HomePage);
         }).catch(err=>{
           console.log("err on getting miners");
-          this.alertController.create({message: err, title: "Error while getting miners info"}).present();
         })
     })
 

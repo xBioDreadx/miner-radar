@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HTTP} from '@ionic-native/http';
 import {Network} from '@ionic-native/network';
 import 'rxjs/add/operator/map';
-import {Platform, ToastController} from "ionic-angular";
+import {AlertController, Platform, ToastController} from "ionic-angular";
 import {SettingsProvider} from "../settings/settings";
 import {MinerProvider} from "../miner/miner";
 import {LoadingController} from 'ionic-angular';
@@ -27,7 +27,7 @@ export class ConnectionProvider {
 
   public loader: any;
 
-  public token:String;
+  public token: String;
   private connectionString = "http://smdom.ua.local:8080/";
 
   constructor(public http: HTTP,
@@ -40,7 +40,8 @@ export class ConnectionProvider {
               public push: Push,
               public localNotifications: LocalNotifications,
               public vibration: Vibration,
-              public httpClient: HttpClient) {
+              public httpClient: HttpClient,
+              public alertController:AlertController) {
     /*let disconnectSubscription = this.network.onDisconnect().subscribe(() => {
       let alert = alertController.create({
         message: "You lost Internet connection!",
@@ -86,31 +87,36 @@ export class ConnectionProvider {
   login(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.post(this.connectionString + "/loginMobile", {username:this.settingsProvider.account.username,password:this.settingsProvider.account.password}).then(answer => {
+      this.post(this.connectionString + "/loginMobile", {
+        username: this.settingsProvider.account.username,
+        password: this.settingsProvider.account.password
+      }).then(answer => {
         console.log("answer is ", answer);
-          this.settingsProvider.saveAccount();
+        this.settingsProvider.saveAccount();
         this.token = answer;
         this.push.hasPermission().then((res: any) => {
           if (res.isEnabled) {
             console.log('We have permission to send push notifications');
-            if(this.token!="")
+            if (this.token != "")
               this.initPushNotification();
           } else {
             console.log('We do not have permission to send push notifications');
           }
-        }).catch(err=>{
-          console.log("err in push init ",err);
+        }).catch(err => {
+          console.log("err in push init ", err);
         });
         this.cancelLoading();
-        this.getStoredMiners().then(res=>{
+        this.getStoredMiners().then(res => {
           resolve();
         }).catch(err => {
-            console.log("error in login ", err);
-            this.cancelLoading();
-            reject(err);
-          })
+          console.log("error in login ", err);
+          this.cancelLoading();
+          this.alertController.create({message: err, title: "Error while login"}).present();
+          reject(err);
+        })
       }).catch(err => {
         this.cancelLoading();
+        this.alertController.create({message: err, title: "Error while login"}).present();
         reject(err);
         console.log("err in retrieve ", err);
       })
@@ -120,16 +126,17 @@ export class ConnectionProvider {
   getStoredMiners(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.post(this.connectionString + "/getMinersMobile", {token:this.token}).then(answer => {
-          console.log("result.data. is ", answer);
-          this.minerProvider.setMiners(answer).then(() => {
-            this.cancelLoading();
-            resolve();
-          }).catch(err => {
-            console.log("error in setting miners ", err);
-            this.cancelLoading();
-            reject(err);
-          })
+      this.post(this.connectionString + "/getMinersMobile", {token: this.token}).then(answer => {
+        console.log("result.data. is ", answer);
+        this.minerProvider.setMiners(answer).then(() => {
+          this.cancelLoading();
+          resolve();
+        }).catch(err => {
+          console.log("error in setting miners ", err);
+          this.cancelLoading();
+          this.alertController.create({message: err, title: "Error while getting miners info"}).present();
+          reject(err);
+        })
       }).catch(err => {
         this.cancelLoading();
         reject(err);
@@ -187,12 +194,12 @@ export class ConnectionProvider {
         this.presentLoading();
         this.post(this.connectionString + "/updateMinerSettings",
           {
-            token:this.token,
+            token: this.token,
             minerId: miner.minerId,
             settings: miner.minerSettings
           }).then(answer => {
           this.cancelLoading();
-            resolve(true);
+          resolve(true);
         }).catch(err => {
           this.cancelLoading();
           reject(err);
@@ -220,10 +227,10 @@ export class ConnectionProvider {
   }
 
   post(link: string, data?: Object): Promise<any> {
-    console.log("data to retrieve ",data);
+    console.log("data to retrieve ", data);
     return new Promise((resolve, reject) => {
       this.httpClient.post<ResponseInterface>(link, data).retry(2).subscribe((result) => {
-        console.log("result of post to "+link+" is: ",result);
+          console.log("result of post to " + link + " is: ", result);
           if (result.status)
             resolve(result.data);
           else
@@ -247,9 +254,9 @@ export class ConnectionProvider {
 
   get(link, data?) {
     return new Promise((resolve, reject) => {
-      console.log("data to retrieve ",data);
+      console.log("data to retrieve ", data);
       this.httpClient.get<ResponseInterface>(link, data).retry(2).subscribe(<ResponseInterface>(result) => {
-          console.log("result of GET to "+link+" is: ",result);
+          console.log("result of GET to " + link + " is: ", result);
           if (result.status)
             resolve(result.data);
           else

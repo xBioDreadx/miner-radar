@@ -1,7 +1,7 @@
-import { Component, ViewChild } from '@angular/core';
-import { Nav, Platform } from 'ionic-angular';
-import { SplashScreen } from '@ionic-native/splash-screen';
-import { HomePage } from '../pages/home/home';
+import {Component, ViewChild} from '@angular/core';
+import {Nav, Platform} from 'ionic-angular';
+import {SplashScreen} from '@ionic-native/splash-screen';
+import {HomePage} from '../pages/home/home';
 import {SettingsProvider} from "../providers/settings/settings";
 import {LoginPage} from "../pages/login/login";
 import {SettingsPage} from "../pages/settings/settings";
@@ -16,20 +16,20 @@ export class MyApp {
 
   rootPage: any = LoginPage;
 
-  pages: Array<{title: string, component: any}>;
+  pages: Array<{ title: string, component: any }>;
 
   constructor(public platform: Platform,
-             // public statusBar: StatusBar,
+              // public statusBar: StatusBar,
               public splashScreen: SplashScreen,
-              public settingsProvider:SettingsProvider,
-              public connectionProvider:ConnectionProvider,
-              public push:Push) {
+              public settingsProvider: SettingsProvider,
+              public connectionProvider: ConnectionProvider,
+              public push: Push) {
     this.initializeApp();
 
     // used for an example of ngFor and navigation
     this.pages = [
-      { title: 'Home', component: HomePage },
-      { title: 'Settings', component: SettingsPage }
+      {title: 'Home', component: HomePage},
+      {title: 'Settings', component: SettingsPage}
     ];
 
   }
@@ -40,28 +40,40 @@ export class MyApp {
       // Here you can do any higher level native things you might need.
       //this.statusBar.styleDefault();
       //make settings initialisation and decide how page will be root
-      this.settingsProvider.init().then(result=>{
+      this.settingsProvider.init().then(result => {
         this.splashScreen.hide();
-        if(!result){
+        if (!result) {
           this.nav.setRoot(LoginPage)
         }
-        else
-        {
+        else {
           this.push.hasPermission().then((res: any) => {
             if (res.isEnabled) {
               console.log('We have permission to send push notifications');
-              if(this.connectionProvider.token!=null)
+              if (this.connectionProvider.token != null)
                 this.connectionProvider.initPushNotification()
-
             } else {
               console.log('We do not have permission to send push notifications');
             }
 
-          }).catch(err=>{
-            console.log("err in push init ",err);
+          }).catch(err => {
+            console.log("err in push init ", err);
           });
-
-          this.nav.setRoot(HomePage)
+          if (this.connectionProvider.token != null) {
+            this.connectionProvider.getStoredMiners().then(() => {
+              this.nav.setRoot(HomePage)
+            }).catch(() => {
+              this.nav.setRoot(HomePage)
+            })
+          }
+          else {
+            this.connectionProvider.login().then(() => {
+              this.connectionProvider.getStoredMiners().then(() => {
+                this.nav.setRoot(HomePage)
+              })
+            }).catch(() => {
+              this.nav.setRoot(LoginPage)
+            })
+          }
         }
 
       });
