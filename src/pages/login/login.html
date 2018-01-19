@@ -10,10 +10,10 @@
 <ion-content class="login_screen">
   <ion-list class="transparent margin_list">
       <ion-item class="transparent input_item">
-        <ion-input type="text" placeholder="Username"></ion-input>
+        <ion-input type="text" [(ngModel)]="username" placeholder="Username"></ion-input>
       </ion-item>
       <ion-item class="transparent input_item">
-        <ion-input type="password" placeholder="Password"></ion-input>
+        <ion-input type="password" [(ngModel)]="password" placeholder="Password"></ion-input>
       </ion-item>
       <ion-item class="transparent input_item">
         <button ion-button (click)="login()" class="loginButton">Login</button>

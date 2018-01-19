@@ -18,8 +18,8 @@ import {HomePage} from "../home/home";
 })
 export class LoginPage {
 
-  public username:String;
-  public password:String;
+  public username:String="";
+  public password:String="";
 
   constructor(public navCtrl: NavController,
               public navParams: NavParams,
@@ -35,25 +35,26 @@ export class LoginPage {
 
   login()
   {
-   /* this.connectionProvider.checkConnection().then(()=>{
+    this.connectionProvider.checkConnection().then(()=>{
       this.settingsProvider.account = new Account(this.username,this.password);
+      console.log("created new account ",this.settingsProvider.account);
         this.connectionProvider.login().then(()=>{
           this.navCtrl.setRoot(HomePage,{firstRun:true});
         }).catch(err=>{
           console.log("err on getting miners");
           this.alertController.create({message: err, title: "Error while getting miners info"}).present();
         })
-    })*/
+    })
 
    //делаем вид, что авторизуемся
-    this.loadingController.create({
+   /* this.loadingController.create({
       content:'Authorization...',
       spinner:'crescent',
       dismissOnPageChange:true
     }).present();
     setTimeout(()=>{
       this.navCtrl.push(HomePage);
-    },500)
+    },500)*/
   }
 
 

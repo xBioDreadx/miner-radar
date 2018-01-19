@@ -1,9 +1,8 @@
-import {Component, NgZone, ViewChild} from '@angular/core';
+import {Component, NgZone} from '@angular/core';
 import {AlertController, NavController, NavParams, Platform,Nav} from 'ionic-angular';
 import {SettingsProvider} from "../../providers/settings/settings";
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {MinerProvider} from "../../providers/miner/miner";
-import {MinerSettingsPage} from "../miner-settings/miner-settings";
 import {MinerInfoPage} from "../miner-info/miner-info";
 import {ApplicationSettingsPage} from "../application-settings/application-settings";
 
@@ -31,6 +30,10 @@ this.platform.ready().then(()=>{
 
   }
 
+  /**
+   * не используется
+   * @param i
+   */
   updateMiner(i)
   {
     this.connectionProvider.checkConnection().then(()=>{
@@ -42,6 +45,9 @@ this.platform.ready().then(()=>{
     })
   }
 
+  /**
+   * не используется
+   */
   updateInformation()
   {
     console.log("click");
@@ -53,10 +59,6 @@ this.platform.ready().then(()=>{
     })
   }
 
-  changeMiner(i)
-  {
-    this.nav.push(MinerSettingsPage,{"miner":i});
-  }
 
 
   minerInfo(i)

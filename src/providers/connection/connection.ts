@@ -27,6 +27,7 @@ export class ConnectionProvider {
 
   public loader: any;
 
+  public token:String;
   private connectionString = "http://smdom.ua.local:8080/";
 
   constructor(public http: HTTP,
@@ -85,14 +86,26 @@ export class ConnectionProvider {
   login(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.get(this.connectionString + "/minerLogin", this.settingsProvider.account).then(answer => {
+      this.post(this.connectionString + "/loginMobile", {username:this.settingsProvider.account.username,password:this.settingsProvider.account.password}).then(answer => {
         console.log("answer is ", answer);
           this.settingsProvider.saveAccount();
-          this.minerProvider.setMiners(answer['miners']).then(() => {
-            this.cancelLoading();
-            resolve();
-          }).catch(err => {
-            console.log("error in setting miners ", err);
+        this.token = answer;
+        this.push.hasPermission().then((res: any) => {
+          if (res.isEnabled) {
+            console.log('We have permission to send push notifications');
+            if(this.token!="")
+              this.initPushNotification();
+          } else {
+            console.log('We do not have permission to send push notifications');
+          }
+        }).catch(err=>{
+          console.log("err in push init ",err);
+        });
+        this.cancelLoading();
+        this.getStoredMiners().then(res=>{
+          resolve();
+        }).catch(err => {
+            console.log("error in login ", err);
             this.cancelLoading();
             reject(err);
           })
@@ -107,9 +120,9 @@ export class ConnectionProvider {
   getStoredMiners(): Promise<any> {
     return new Promise((resolve, reject) => {
       this.presentLoading();
-      this.get(this.connectionString + "/getMiners", this.settingsProvider.account).then(answer => {
+      this.post(this.connectionString + "/getMinersMobile", {token:this.token}).then(answer => {
           console.log("result.data. is ", answer);
-          this.minerProvider.setMiners(answer['miners']).then(() => {
+          this.minerProvider.setMiners(answer).then(() => {
             this.cancelLoading();
             resolve();
           }).catch(err => {
@@ -156,6 +169,7 @@ export class ConnectionProvider {
     return new Promise(resolve => {
       if (this.isOnline()) {
         this.get(this.connectionString + "/setDeviceId", {
+          token: this.token,
           deviceID: deviceID
         }).then(result => {
           resolve(result);
@@ -170,14 +184,12 @@ export class ConnectionProvider {
   postMinersSettings(miner): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.isOnline()) {
-        let settings = miner.minerSettings;
         this.presentLoading();
         this.post(this.connectionString + "/updateMinerSettings",
           {
-            username: this.settingsProvider.account.username,
-            password: this.settingsProvider.account.password,
+            token:this.token,
             minerId: miner.minerId,
-            settings: settings
+            settings: miner.minerSettings
           }).then(answer => {
           this.cancelLoading();
             resolve(true);
@@ -208,13 +220,14 @@ export class ConnectionProvider {
   }
 
   post(link: string, data?: Object): Promise<any> {
+    console.log("data to retrieve ",data);
     return new Promise((resolve, reject) => {
       this.httpClient.post<ResponseInterface>(link, data).retry(2).subscribe((result) => {
         console.log("result of post to "+link+" is: ",result);
           if (result.status)
-            resolve(JSON.parse(result.data));
+            resolve(result.data);
           else
-            reject(result.reason);
+            reject(result.error);
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {
@@ -234,11 +247,13 @@ export class ConnectionProvider {
 
   get(link, data?) {
     return new Promise((resolve, reject) => {
+      console.log("data to retrieve ",data);
       this.httpClient.get<ResponseInterface>(link, data).retry(2).subscribe(<ResponseInterface>(result) => {
+          console.log("result of GET to "+link+" is: ",result);
           if (result.status)
-            resolve(JSON.parse(result.data));
+            resolve(result.data);
           else
-            reject(result.reason);
+            reject(result.error);
         },
         (err: HttpErrorResponse) => {
           if (err.error instanceof Error) {

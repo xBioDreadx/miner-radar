@@ -39,18 +39,6 @@ export class MyApp {
       // Okay, so the platform is ready and our plugins are available.
       // Here you can do any higher level native things you might need.
       //this.statusBar.styleDefault();
-      this.push.hasPermission().then((res: any) => {
-        if (res.isEnabled) {
-          console.log('We have permission to send push notifications');
-          //TODO заглушка для виндовса
-          //this.connectionProvider.initPushNotification();
-        } else {
-          console.log('We do not have permission to send push notifications');
-        }
-
-      }).catch(err=>{
-        console.log("err in push init ",err);
-      });
       //make settings initialisation and decide how page will be root
       this.settingsProvider.init().then(result=>{
         this.splashScreen.hide();
@@ -58,7 +46,24 @@ export class MyApp {
           this.nav.setRoot(LoginPage)
         }
         else
+        {
+          this.push.hasPermission().then((res: any) => {
+            if (res.isEnabled) {
+              console.log('We have permission to send push notifications');
+              if(this.connectionProvider.token!=null)
+                this.connectionProvider.initPushNotification()
+
+            } else {
+              console.log('We do not have permission to send push notifications');
+            }
+
+          }).catch(err=>{
+            console.log("err in push init ",err);
+          });
+
           this.nav.setRoot(HomePage)
+        }
+
       });
     });
   }

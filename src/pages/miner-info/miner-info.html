@@ -38,12 +38,12 @@
   </ion-grid>
   <mat-expansion-panel>
     <mat-expansion-panel-header class="expansion_header">
-      Etherium {{miner.speedEth}} MH/s
+      Etherium {{miner.speedEth | number:'2.2-2'}} MH/s
     </mat-expansion-panel-header>
     <ion-grid>
       <ion-row class="expansion_row">
         <ion-col col-6>Speed</ion-col>
-        <ion-col col-6>{{miner.speedEth}}</ion-col>
+        <ion-col col-6>{{miner.speedEth | number:'2.2-2'}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-6>Accepted</ion-col>
@@ -68,7 +68,7 @@
       Rates
       </mat-expansion-panel-header>
         <ion-list>
-          <ion-item class="rate_item" *ngFor="let eth of miner.detaliedEth">{{eth}}  MH/s</ion-item>
+          <ion-item class="rate_item" *ngFor="let eth of miner.detaliedEth">{{eth | number:'2.2-2'}}  MH/s</ion-item>
         </ion-list>
     </mat-expansion-panel>
 
@@ -76,12 +76,12 @@
 
   <mat-expansion-panel>
     <mat-expansion-panel-header class="expansion_header">
-      Decred {{miner.speedDcr}} MH/s
+      Decred {{miner.speedDcr | number:'2.2-2'}} MH/s
     </mat-expansion-panel-header>
     <ion-grid>
       <ion-row class="expansion_row">
         <ion-col col-8>Speed</ion-col>
-        <ion-col col-4>{{miner.speedDcr}}</ion-col>
+        <ion-col col-4>{{miner.speedDcr | number:'2.2-2'}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-8>Accepted Shares</ion-col>
@@ -105,7 +105,7 @@
         Rates
       </mat-expansion-panel-header>
       <ion-list>
-        <ion-item class="rate_item" *ngFor="let dcr of miner.detaliedDcr">{{dcr}}  MH/s</ion-item>
+        <ion-item class="rate_item" *ngFor="let dcr of miner.detaliedDcr">{{dcr | number:'2.2-2'}}  MH/s</ion-item>
       </ion-list>
     </mat-expansion-panel>
   </mat-expansion-panel>
