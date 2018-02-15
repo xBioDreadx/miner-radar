@@ -3,7 +3,6 @@ import { ErrorHandler, NgModule } from '@angular/core';
 import {IonicApp, IonicErrorHandler, IonicModule, NavController} from 'ionic-angular';
 import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
-import { ListPage } from '../pages/list/list';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { SettingsProvider } from '../providers/settings/settings';
 import { ConnectionProvider } from '../providers/connection/connection';
@@ -27,7 +26,6 @@ import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
   declarations: [
     MyApp,
     HomePage,
-    ListPage,
     LoginPage,
     SettingsPage,
     MinerSettingsPage,
@@ -45,7 +43,6 @@ import {HttpClient, HttpClientModule, HttpHandler} from "@angular/common/http";
   entryComponents: [
     MyApp,
     HomePage,
-    ListPage,
     LoginPage,
     SettingsPage,
     MinerSettingsPage,

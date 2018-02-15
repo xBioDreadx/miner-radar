@@ -1,8 +1,5 @@
 <ion-header>
   <ion-navbar>
-    <button ion-button menuToggle>
-      <ion-icon name="menu"></ion-icon>
-    </button>
     <ion-title>Miners List</ion-title>
   </ion-navbar>
 </ion-header>
@@ -29,10 +26,10 @@
       <ion-grid>
         <ion-row>
           <ion-col col-6 class="miner_speed">
-            {{miner.speedEth | number:'2.2-2'}}Mh/s Eth
+            {{miner.ethSpeed | number:'2.2-2'}}Mh/s Eth
           </ion-col>
           <ion-col col-6 class="miner_speed">
-            {{miner.speedDcr | number:'2.2-2'}}Mh/s Dcr
+            {{miner.dcrSpeed | number:'2.2-2'}}Mh/s Dcr
           </ion-col>
         </ion-row>
       </ion-grid>

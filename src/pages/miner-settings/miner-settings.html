@@ -18,19 +18,23 @@
     <ng-container *ngFor="let setting of miner.minerSettings;let iter = index">
       <ion-card *ngIf="setting.enabled==true" class="settings_card">
         <ion-card-header>{{setting.name}}
-          <ion-icon name="notifications-off" class="settings_disable_notification" *ngIf="setting.mute" (click)="switchMute(iter)"></ion-icon>
-          <ion-icon name="notifications" class="settings_enable_notification" *ngIf="!setting.mute" (click)="switchMute(iter)"> </ion-icon>
+          <ion-icon name="notifications-off" class="settings_disable_notification" *ngIf="setting.muted" (click)="switchMute(iter)"></ion-icon>
+          <ion-icon name="notifications" class="settings_enable_notification" *ngIf="!setting.muted" (click)="switchMute(iter)"> </ion-icon>
+          <ion-icon name="ios-trash-outline" class="settings_enable_notification" (click)="cancel()"> </ion-icon>
         </ion-card-header>
         <ion-card-content>
           <ion-item>
             <ion-label class="settings_label">Value must be more than, {{setting.type}}</ion-label>
-            <ion-input [ngModel]="(setting.low_value>-1)?setting.low_value:''"></ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-input [ngModel]="(setting.lowerLimit>-1)?(setting.lowerLimit  | number:'2.2-2'):''"></ion-input>
           </ion-item>
           <ion-item>
             <ion-label class="settings_label">Value must be low, than, {{setting.type}}</ion-label>
-            <ion-input [ngModel]="(setting.high_value>-1)?setting.high_value:''"></ion-input>
           </ion-item>
-          <ion-item><button ion-button (click)="cancel()">Delete notification</button></ion-item>
+          <ion-item>
+            <ion-input [ngModel]="(setting.upperLimit>-1)?(setting.upperLimit | number:'2.2-2'):''"></ion-input>
+          </ion-item>
         </ion-card-content>
       </ion-card>
     </ng-container>

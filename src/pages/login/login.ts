@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 import {AlertController, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {SettingsProvider} from "../../providers/settings/settings";
 import {Account} from "../../Types/Account";
 import {HomePage} from "../home/home";
+import {MinerProvider} from "../../providers/miner/miner";
 
 /**
  * Generated class for the LoginPage page.
@@ -18,40 +19,59 @@ import {HomePage} from "../home/home";
 })
 export class LoginPage {
 
-  public username:String="";
-  public password:String="";
+  public username: String = "";
+  public password: String = "";
 
   constructor(public navCtrl: NavController,
-              public connectionProvider:ConnectionProvider,
-              public settingsProvider:SettingsProvider) {
+              public connectionProvider: ConnectionProvider,
+              public settingsProvider: SettingsProvider,
+              public minerProvider: MinerProvider,
+              public alertController: AlertController) {
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad LoginPage');
   }
 
-  login()
-  {
-    this.connectionProvider.checkConnection().then(()=>{
-      this.settingsProvider.account = new Account(this.username,this.password);
-      console.log("created new account ",this.settingsProvider.account);
-        this.connectionProvider.login().then(()=>{
+  login() {
+    this.connectionProvider.checkConnection().then(() => {
+      this.settingsProvider.account = new Account(this.username, this.password);
+      console.log("created new account ", this.settingsProvider.account);
+      this.connectionProvider.login(this.settingsProvider.account).then(() => {
+        this.connectionProvider.getStoredMiners().then(miners => {
+          this.minerProvider.setMiners(miners).then(() => {
+          }).catch(err => {
+            console.log("error in setting miners ", err);
+            this.alertController.create({
+              message: err,
+              title: "Error while getting miners info",
+              buttons: [{text: "ok"}]
+            }).present();
+          })
+        }).catch(err => {
+          console.log("error in setting miners ", err);
+          this.alertController.create({
+            message: err,
+            title: "Error while getting miners info",
+            buttons: [{text: "ok"}]
+          }).present();
+          this.settingsProvider.saveAccount();
+          this.connectionProvider.initPushNotification(this.settingsProvider.account,this.settingsProvider.settings);
           this.navCtrl.setRoot(HomePage);
-        }).catch(err=>{
-          console.log("err on getting miners");
         })
-    })
+      }).catch(err => {
+        console.log("err on login");
+      })
 
-   //делаем вид, что авторизуемся
-   /* this.loadingController.create({
-      content:'Authorization...',
-      spinner:'crescent',
-      dismissOnPageChange:true
-    }).present();
-    setTimeout(()=>{
-      this.navCtrl.push(HomePage);
-    },500)*/
+      //делаем вид, что авторизуемся
+      /* this.loadingController.create({
+         content:'Authorization...',
+         spinner:'crescent',
+         dismissOnPageChange:true
+       }).present();
+       setTimeout(()=>{
+         this.navCtrl.push(HomePage);
+       },500)*/
+    });
   }
-
-
 }

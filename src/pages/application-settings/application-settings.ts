@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import {IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
 import {SettingsProvider} from "../../providers/settings/settings";
+import {LoginPage} from "../login/login";
 
 /**
  * Generated class for the ApplicationSettingsPage page.
@@ -16,7 +17,10 @@ import {SettingsProvider} from "../../providers/settings/settings";
 })
 export class ApplicationSettingsPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams,public settingsProvider:SettingsProvider,public toastController: ToastController) {
+  constructor(public navCtrl: NavController,
+              public navParams: NavParams,
+              public settingsProvider:SettingsProvider,
+              public toastController: ToastController) {
   }
 
   ionViewDidLoad() {
@@ -35,6 +39,13 @@ export class ApplicationSettingsPage {
         message: "Error while saveing settings",
         duration: 1500
       }).present();
+    })
+  }
+
+  logout()
+  {
+    this.settingsProvider.logout().then(()=>{
+      this.navCtrl.setRoot(LoginPage);
     })
   }
 

@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {HTTP} from '@ionic-native/http';
 import {NativeStorage} from '@ionic-native/native-storage';
 import 'rxjs/add/operator/map';
 import {Account} from "../../Types/Account";
@@ -18,8 +17,7 @@ export class SettingsProvider {
   public account: Account;
   public settings: Settings;
 
-  constructor(public http: HTTP,
-              public nativeStorage: NativeStorage,) {
+  constructor(public nativeStorage: NativeStorage,) {
     console.log('Hello SettingsProvider Provider');
     this.account = new Account(null, null);
   }
@@ -77,6 +75,15 @@ export class SettingsProvider {
         resolve()
       });
     } ));
+  }
+
+  logout(): Promise<any> {
+    return new Promise((resolve => {
+      this.nativeStorage.remove("account").then(() => {
+        this.account = null;
+        resolve()
+      });
+    }));
   }
 
 }

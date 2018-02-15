@@ -35,9 +35,19 @@ this.platform.ready().then(()=>{
   {
     console.log("click");
     this.connectionProvider.checkConnection().then(()=>{
-      this.connectionProvider.getStoredMiners().catch(err=>{
+      this.connectionProvider.getStoredMiners().then(miners =>{
+        this.minerProvider.setMiners(miners).then(() => {
+        }).catch(err => {
+          console.log("error in setting miners ", err);
+          this.alertController.create({
+            message: err,
+            title: "Error while getting miners info",
+            buttons: [{text: "ok"}]
+          }).present();
+        })
+      }).catch(err=>{
         console.log("err on getting miners");
-        this.alertController.create({message: err, title: "Error while getting miners info"}).present();
+        this.alertController.create({message: err, title: "Error while getting miners info", buttons: [{text: "ok"}]}).present();
       })
     })
   }
@@ -52,6 +62,14 @@ this.platform.ready().then(()=>{
   applicationSettings()
   {
     this.nav.push(ApplicationSettingsPage);
+  }
+
+
+  swipeEvent(e) {
+    console.log("SWIPED!", e);
+    if (e.direction == 0) {
+      this.updateInformation();
+    }
   }
 
 }

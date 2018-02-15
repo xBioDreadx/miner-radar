@@ -1,5 +1,5 @@
 import {Component, ViewChild} from '@angular/core';
-import {Nav, Platform} from 'ionic-angular';
+import {AlertController, Nav, Platform} from 'ionic-angular';
 import {SplashScreen} from '@ionic-native/splash-screen';
 import {HomePage} from '../pages/home/home';
 import {SettingsProvider} from "../providers/settings/settings";
@@ -7,6 +7,7 @@ import {LoginPage} from "../pages/login/login";
 import {SettingsPage} from "../pages/settings/settings";
 import {ConnectionProvider} from "../providers/connection/connection";
 import {Push} from "@ionic-native/push";
+import {MinerProvider} from "../providers/miner/miner";
 
 @Component({
   templateUrl: 'app.html'
@@ -14,7 +15,7 @@ import {Push} from "@ionic-native/push";
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
 
-  rootPage: any = LoginPage;
+  rootPage: any = HomePage;
 
   pages: Array<{ title: string, component: any }>;
 
@@ -23,6 +24,8 @@ export class MyApp {
               public splashScreen: SplashScreen,
               public settingsProvider: SettingsProvider,
               public connectionProvider: ConnectionProvider,
+              public minerProvider: MinerProvider,
+              public alertController: AlertController,
               public push: Push) {
     this.initializeApp();
 
@@ -50,7 +53,7 @@ export class MyApp {
             if (res.isEnabled) {
               console.log('We have permission to send push notifications');
               if (this.connectionProvider.token != null)
-                this.connectionProvider.initPushNotification()
+                this.connectionProvider.initPushNotification(this.settingsProvider.account,this.settingsProvider.settings)
             } else {
               console.log('We do not have permission to send push notifications');
             }
@@ -58,21 +61,53 @@ export class MyApp {
           }).catch(err => {
             console.log("err in push init ", err);
           });
+          this.connectionProvider.checkConnection().then(() => {
+            if (this.connectionProvider.token != null) {
+              this.nav.setRoot(HomePage);
+              this.connectionProvider.getStoredMiners().then((miners) => {
+                this.minerProvider.setMiners(miners).then(() => {
 
-          if (this.connectionProvider.token != null) {
-            this.connectionProvider.getStoredMiners().then(() => {
-              this.nav.setRoot(HomePage)
-            }).catch(() => {
-              this.nav.setRoot(HomePage)
-            })
-          }
-          else {
-            this.connectionProvider.login().then(() => {
-              this.nav.setRoot(HomePage)
-            }).catch(() => {
-              this.nav.setRoot(LoginPage)
-            })
-          }
+                }).catch(err => {
+                  console.log("error in setting miners ", err);
+                  this.alertController.create({
+                    message: err,
+                    title: "Error while getting miners info",
+                    buttons: [{text: "ok"}]
+                  }).present();
+                })
+              }).catch(() => {
+
+              })
+            }
+            else {
+              this.connectionProvider.login(this.settingsProvider.account).then(() => {
+                this.connectionProvider.getStoredMiners().then(miners => {
+                  this.minerProvider.setMiners(miners).then(() => {
+
+                  }).catch(err => {
+                    console.log("error in setting miners ", err);
+                    this.alertController.create({
+                      message: err,
+                      title: "Error while getting miners info",
+                      buttons: [{text: "ok"}]
+                    }).present();
+                  })
+                }).catch(err => {
+                  console.log("error in setting miners ", err);
+                  this.alertController.create({
+                    message: err,
+                    title: "Error while getting miners info",
+                    buttons: [{text: "ok"}]
+                  }).present();
+                });
+                this.settingsProvider.saveAccount();
+                this.connectionProvider.initPushNotification(this.settingsProvider.account,this.settingsProvider.settings);
+                this.nav.setRoot(HomePage)
+              }).catch(() => {
+                this.nav.setRoot(LoginPage)
+              })
+            }
+          })
         }
       });
     });

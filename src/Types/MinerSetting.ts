@@ -4,11 +4,12 @@ export  class  MinerSetting{
  //включён ли параметр
   public enabled:boolean = false;
   //нижний порог срабатывания параметра, при -1 не срабатывает
-  public low_value:number =-1;
+  public lowerLimit:number =-1;
   //верхний порог срабатывания параметра, при -1 не срабатывает
-  public high_value: number = -1;
+  public upperLimit: number = -1;
   //отключение нотификации
-  public mute:boolean = false;
+  public muted:boolean = false;
+
   //имя параметра, нельзя изменить
   private _name:string;
   //тип измерения параметра, нельзя изменить
@@ -16,12 +17,12 @@ export  class  MinerSetting{
 
 
 
-  constructor(name:string,type:string,enabled: boolean,low_value:number,high_value:number,minerId?:number) {
-    this._name=name;
+  constructor(name:string,type:string,enabled: boolean,lowerLimit:number,upperLimit:number,minerId?:number) {
+    this._name= name
     this._type= type;
     this.enabled = enabled;
-    this.low_value = low_value;
-    this.high_value = high_value;
+    this.lowerLimit = lowerLimit;
+    this.upperLimit = upperLimit;
     if(minerId!==null)
     {
       this._minerId = minerId;
@@ -40,5 +41,9 @@ export  class  MinerSetting{
   get minerId():Number
   {
     return this._minerId
+  }
+  set name(name:String)
+  {
+   this._name = name.replace("_","").toLowerCase();
   }
 }

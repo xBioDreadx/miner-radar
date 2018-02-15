@@ -16,9 +16,9 @@
     <ng-container *ngFor="let gpu of miner.gpus; let i= index">
       <ion-row class="temperature_row">
         <ion-col col-1>{{i+1}}</ion-col>
-        <ion-col col-7><span class="temperature_span"><span class="temperature_graph" [ngStyle]="{'max-width': (gpu.gpuTemperature<110)?((100-((gpu.gpuTemperature/110)*100))+'%'):'0%' }"></span></span>
+        <ion-col col-7><span class="temperature_span"><span class="temperature_graph" [ngStyle]="{'max-width': (gpu.temperature<110)?((100-((gpu.temperature/110)*100))+'%'):'0%' }"></span></span>
         </ion-col>
-        <ion-col col-3>{{gpu.gpuTemperature}} °C</ion-col>
+        <ion-col col-3>{{gpu.temperature}} °C</ion-col>
         <ion-col col-1><ion-icon name="ios-thermometer-outline"></ion-icon></ion-col>
       </ion-row>
       <ion-row class="fan_row">
@@ -38,28 +38,28 @@
   </ion-grid>
   <mat-expansion-panel>
     <mat-expansion-panel-header class="expansion_header">
-      Etherium {{miner.speedEth | number:'2.2-2'}} MH/s
+      Etherium {{miner.ethSpeed | number:'2.2-2'}} MH/s
     </mat-expansion-panel-header>
     <ion-grid>
       <ion-row class="expansion_row">
         <ion-col col-6>Speed</ion-col>
-        <ion-col col-6>{{miner.speedEth | number:'2.2-2'}}</ion-col>
+        <ion-col col-6>{{miner.ethSpeed | number:'2.2-2'}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-6>Accepted</ion-col>
-        <ion-col col-6>{{miner.acceptedSharesEth}}</ion-col>
+        <ion-col col-6>{{miner.ethSharesAccepted}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-6>Rejected</ion-col>
-        <ion-col col-6>{{miner.rejectedSharesEth}}</ion-col>
+        <ion-col col-6>{{miner.ethSharesRejected}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-6>Incorrect</ion-col>
-        <ion-col col-6>{{miner.invalidEth}}</ion-col>
+        <ion-col col-6>{{miner.ethInvalid}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-6>Switches</ion-col>
-        <ion-col col-6>{{miner.switchesEth}}</ion-col>
+        <ion-col col-6>{{miner.ethSwitches}}</ion-col>
       </ion-row>
     </ion-grid>
 
@@ -68,7 +68,7 @@
       Rates
       </mat-expansion-panel-header>
         <ion-list>
-          <ion-item class="rate_item" *ngFor="let eth of miner.detaliedEth">{{eth | number:'2.2-2'}}  MH/s</ion-item>
+          <ion-item class="rate_item" *ngFor="let gpu of miner.gpus">{{gpu.detaliedEth | number:'2.2-2'}}  MH/s</ion-item>
         </ion-list>
     </mat-expansion-panel>
 
@@ -76,28 +76,28 @@
 
   <mat-expansion-panel>
     <mat-expansion-panel-header class="expansion_header">
-      Decred {{miner.speedDcr | number:'2.2-2'}} MH/s
+      Decred {{miner.dcrSpeed | number:'2.2-2'}} MH/s
     </mat-expansion-panel-header>
     <ion-grid>
       <ion-row class="expansion_row">
         <ion-col col-8>Speed</ion-col>
-        <ion-col col-4>{{miner.speedDcr | number:'2.2-2'}}</ion-col>
+        <ion-col col-4>{{miner.dcrSpeed | number:'2.2-2'}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-8>Accepted Shares</ion-col>
-        <ion-col col-4>{{miner.acceptedSharesDcr}}</ion-col>
+        <ion-col col-4>{{miner.dcrSharesAccepted}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-8>Rejected Shares</ion-col>
-        <ion-col col-4>{{miner.rejectedSharesDcr}}</ion-col>
+        <ion-col col-4>{{miner.dcrSharesRejected}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-8>Incorrect Shares</ion-col>
-        <ion-col col-4>{{miner.invalidDcr}}</ion-col>
+        <ion-col col-4>{{miner.dcrInvalid}}</ion-col>
       </ion-row>
       <ion-row class="expansion_row">
         <ion-col col-8>Switches</ion-col>
-        <ion-col col-4>{{miner.switchesDcr}}</ion-col>
+        <ion-col col-4>{{miner.dcrSwitches}}</ion-col>
       </ion-row>
     </ion-grid>
     <mat-expansion-panel>
@@ -105,7 +105,7 @@
         Rates
       </mat-expansion-panel-header>
       <ion-list>
-        <ion-item class="rate_item" *ngFor="let dcr of miner.detaliedDcr">{{dcr | number:'2.2-2'}}  MH/s</ion-item>
+        <ion-item class="rate_item" *ngFor="let gpu of miner.gpus">{{gpu.detaliedDcr | number:'2.2-2'}}  MH/s</ion-item>
       </ion-list>
     </mat-expansion-panel>
   </mat-expansion-panel>

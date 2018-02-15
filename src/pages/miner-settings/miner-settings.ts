@@ -92,7 +92,7 @@ export class MinerSettingsPage {
 
   switchMute(iter) {
     this.zone.run(() => {
-      this.miner.minerSettings[iter].mute = !this.miner.minerSettings[iter].mute
+      this.miner.minerSettings[iter].muted = !this.miner.minerSettings[iter].muted
     });
   }
 }

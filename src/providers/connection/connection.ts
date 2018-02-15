@@ -1,18 +1,16 @@
 import {Injectable} from '@angular/core';
-import {HTTP} from '@ionic-native/http';
 import {Network} from '@ionic-native/network';
 import 'rxjs/add/operator/map';
 import {AlertController, Platform, ToastController} from "ionic-angular";
-import {SettingsProvider} from "../settings/settings";
-import {MinerProvider} from "../miner/miner";
 import {LoadingController} from 'ionic-angular';
 import {Push, PushObject, PushOptions} from "@ionic-native/push";
-import {HomePage} from "../../pages/home/home";
 import {LocalNotifications} from "@ionic-native/local-notifications";
 import {Vibration} from "@ionic-native/vibration";
 import {HttpClient, HttpErrorResponse, HttpRequest, HttpEventType} from "@angular/common/http";
 import 'rxjs/add/operator/retry';
 import {ResponseInterface} from "../../Types/ResponseInterface";
+import {Account} from "../../Types/Account";
+import {Settings} from "../../Types/Settings";
 
 declare const Connection;
 
@@ -30,10 +28,7 @@ export class ConnectionProvider {
   public token: String;
   private connectionString = "http://smdom.ua.local:8080/";
 
-  constructor(public http: HTTP,
-              public network: Network,
-              public settingsProvider: SettingsProvider,
-              public minerProvider: MinerProvider,
+  constructor(public network: Network,
               public loadingCtrl: LoadingController,
               public toastController: ToastController,
               public platform: Platform,
@@ -41,7 +36,7 @@ export class ConnectionProvider {
               public localNotifications: LocalNotifications,
               public vibration: Vibration,
               public httpClient: HttpClient,
-              public alertController:AlertController) {
+              public alertController: AlertController) {
 
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
@@ -66,7 +61,7 @@ export class ConnectionProvider {
   checkConnection(): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.isOnline()) {
-        resolve()
+        resolve(true)
       }
       else {
         this.toastController.create({
@@ -78,39 +73,20 @@ export class ConnectionProvider {
     });
   }
 
-  login(): Promise<any> {
+
+  login(account: Account): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.presentLoading();
+      this.presentLoading("Login in...");
       this.post(this.connectionString + "/loginMobile", {
-        username: this.settingsProvider.account.username,
-        password: this.settingsProvider.account.password
+        username: account.username,
+        password: account.password
       }).then(answer => {
-        console.log("answer is ", answer);
-        this.settingsProvider.saveAccount();
         this.token = answer;
-        this.push.hasPermission().then((res: any) => {
-          if (res.isEnabled) {
-            console.log('We have permission to send push notifications');
-            if (this.token != "")
-              this.initPushNotification();
-          } else {
-            console.log('We do not have permission to send push notifications');
-          }
-        }).catch(err => {
-          console.log("err in push init ", err);
-        });
         this.cancelLoading();
-        this.getStoredMiners().then(res => {
-          resolve();
-        }).catch(err => {
-          console.log("error in login ", err);
-          this.cancelLoading();
-          this.alertController.create({message: err, title: "Error while login",buttons:[{text:"ok"}]}).present();
-          reject(err);
-        })
+        resolve(answer);
       }).catch(err => {
         this.cancelLoading();
-        this.alertController.create({message: err, title: "Error while login",buttons:[{text:"ok"}]}).present();
+        this.alertController.create({message: err, title: "Error while login", buttons: [{text: "ok"}]}).present();
         reject(err);
         console.log("err in retrieve ", err);
       })
@@ -119,18 +95,12 @@ export class ConnectionProvider {
 
   getStoredMiners(): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.presentLoading();
+      this.presentLoading("Getting miners data...");
       this.post(this.connectionString + "/getMinersMobile", {token: this.token}).then(answer => {
         console.log("result.data. is ", answer);
-        this.minerProvider.setMiners(answer).then(() => {
-          this.cancelLoading();
-          resolve();
-        }).catch(err => {
-          console.log("error in setting miners ", err);
-          this.cancelLoading();
-          this.alertController.create({message: err, title: "Error while getting miners info",buttons:[{text:"ok"}]}).present();
-          reject(err);
-        })
+        this.cancelLoading();
+        resolve(answer);
+
       }).catch(err => {
         this.cancelLoading();
         reject(err);
@@ -145,22 +115,22 @@ export class ConnectionProvider {
 
   /**
    *
+   * @param {Account} account
    * @param {String} deviceID
    * @returns {Promise<any>}
    */
-  sendDeviceId(deviceID: String): Promise<any> {
+  sendDeviceId(account: Account,deviceID: String): Promise<any> {
     return new Promise(resolve => {
-      if (this.isOnline()) {
-        this.post(this.connectionString + "/setDeviceId", {
-          token: this.token,
-          deviceID: deviceID
-        }).then(result => {
-          resolve(result);
-        }).catch(err => {
-          resolve();
-          console.log(err);
-        })
-      }
+      this.post(this.connectionString + "/setDeviceId", {
+        username: account.username,
+        password: account.password,
+        deviceID: deviceID
+      }).then(result => {
+        resolve(result);
+      }).catch(err => {
+        resolve(false);
+        console.log(err);
+      })
     })
   }
 
@@ -174,10 +144,10 @@ export class ConnectionProvider {
             minerId: miner.minerId,
             settings: miner.minerSettings
           }).then(answer => {
-         // this.cancelLoading();
+          // this.cancelLoading();
           resolve(true);
         }).catch(err => {
-        //  this.cancelLoading();
+          //  this.cancelLoading();
           reject(err);
           console.log("err in retrieve ", err);
           console.log(err.status);
@@ -191,9 +161,9 @@ export class ConnectionProvider {
   }
 
 
-  presentLoading() {
+  presentLoading(message = "Retrieving data...") {
     this.loader = this.loadingCtrl.create({
-      content: "Retrieving data...",
+      content: message,
     });
     this.loader.present();
   }
@@ -225,7 +195,6 @@ export class ConnectionProvider {
           }
         });
     })
-
   }
 
   get(link, data?) {
@@ -254,62 +223,90 @@ export class ConnectionProvider {
   }
 
 
-  initPushNotification() {
-    if (!this.platform.is('cordova')) {
-      console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
-      return;
-    }
-    const options: PushOptions = {
-      android: {
-        senderID: "1034639132392"
-      },
-      ios: {
-        alert: 'true',
-        badge: false,
-        sound: 'true'
-      }
-    };
-    const pushObject: PushObject = this.push.init(options);
+  initPushNotification(account: Account,settings: Settings): Promise<any> {
+    return new Promise((resolve, reject) => {
+      const options: PushOptions = {
+        android: {
+          senderID: "1034639132392"
+        },
+        ios: {
+          alert: 'true',
+          badge: false,
+          sound: 'true'
+        }
+      };
 
-    pushObject.on('registration').subscribe((data: any) => {
-      console.log('device token -> ' + data.registrationId);
-      this.sendDeviceId(data.registrationId);
-      //TODO - send device token to server
-    });
-
-    pushObject.on('notification').subscribe((data: any) => {
-      console.log('message -> ' + data);
-      //if user using app and push notification comes
-      if (this.settingsProvider.settings.vibration == true) {
-        if (this.platform.is('android'))
-          this.vibration.vibrate([600, 200, 300, 200, 300, 200, 600]); //SOS on morze
-        else
-          this.vibration.vibrate([1500])
+      if (!this.platform.is('cordova')) {
+        console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
+        resolve(false);
       }
-      if (this.settingsProvider.settings.notification == true) {
-        this.localNotifications.schedule({
-          id: Math.floor(Math.random() * (1000000000 - 1) + 1),
-          title: data.title,
-          text: data.message,
-          sound: this.settingsProvider.settings.sound == true && this.platform.is('android') ? 'res://platform_default' : null,//(this.platform.is('android') && this.settingsProvider.settings.sound == true) ? 'file://assets/sounds/android.mp3' : 'file://beep.caf',//TODO need ti choose sound for other device
-          badge: 1,
-          icon: 'file://assets/icon/favicon.ico',
-          smallIcon: 'file://assets/icon/favicon.ico'
+      else {
+        //TODO добавить проверку на существование, чтоб не слать каждый раз
+        this.push.hasPermission().then((res: any) => {
+          if (res.isEnabled) {
+            console.log('We have permission to send push notifications');
+            const pushObject: PushObject = this.push.init(options);
+            pushObject.on('registration').subscribe((data: any) => {
+              console.log('device token -> ' + data.registrationId);
+              this.sendDeviceId(account,data.registrationId);
+              //TODO - send device token to server
+            });
+
+            this.push.createChannel({
+              id: "miner-radar Notifications",
+              description: "Channel for sending warning messages from your miners",
+              // The importance property goes from 1 = Lowest, 2 = Low, 3 = Normal, 4 = High and 5 = Highest.
+              importance: 5
+            }).then(() => console.log('Channel created'));
+
+
+            pushObject.on('notification').subscribe((data: any) => {
+              console.log('message -> ' + data);
+              //if user using app and push notification comes
+              if (settings.vibration == true) {
+                if (this.platform.is('android'))
+                  this.vibration.vibrate([600, 200, 300, 200, 300, 200, 600]); //SOS on morze
+                else
+                  this.vibration.vibrate([1500])
+              }
+              if (settings.notification == true) {
+                this.localNotifications.schedule({
+                  id: Math.floor(Math.random() * (1000000000 - 1) + 1),
+                  title: data.title,
+                  text: data.message,
+                  sound: settings.sound == true && this.platform.is('android') ? 'res://platform_default' : null,
+                  badge: 1,
+                  icon: 'file://assets/icon/favicon.ico',
+                  smallIcon: 'file://assets/icon/favicon.ico'
+                });
+              }
+
+              if (data.additionalData.foreground) {
+                // if application open, show popup
+                //TODO: Your logic here
+                //data.message
+              } else {
+                //if user NOT using app and push notification comes
+                //TODO: Your logic on click of push notification directly
+                ///  this.nav.setRoot(HomePage);
+                console.log('Push notification clicked');
+              }
+            });
+            pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
+            resolve(true);
+          } else {
+            console.log('We do not have permission to send push notifications');
+            reject({err: "permission denied"})
+          }
+        }).catch(err => {
+          console.log("err in push init ", err);
+          reject({err: err})
         });
       }
 
-      if (data.additionalData.foreground) {
-        // if application open, show popup
-        //TODO: Your logic here
-        //data.message
-      } else {
-        //if user NOT using app and push notification comes
-        //TODO: Your logic on click of push notification directly
-        ///  this.nav.setRoot(HomePage);
-        console.log('Push notification clicked');
-      }
     });
-    pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
+
+
   }
 
 }
