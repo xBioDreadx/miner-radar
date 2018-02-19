@@ -22,6 +22,19 @@ export class MinerInfoPage {
   miner: Miner;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public minerProvider: MinerProvider) {
+    let minerAlertId = this.navParams.get("minerAlertId");
+    if(minerAlertId>0)
+    {
+      for(let i=0;i<this.minerProvider.miners.length;i++)
+      {
+        if(this.minerProvider.miners[i].minerId==minerAlertId)
+        {
+          this.miner = this.minerProvider.miners[i];
+          break;
+        }
+      }
+    }
+    else
     this.miner = this.minerProvider.miners[(this.navParams.get("miner"))];
   }
 

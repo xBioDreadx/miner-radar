@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {AlertController, LoadingController, NavController, NavParams} from 'ionic-angular';
+import {AlertController, Events, LoadingController, NavController, NavParams} from 'ionic-angular';
 import {ConnectionProvider} from "../../providers/connection/connection";
 import {SettingsProvider} from "../../providers/settings/settings";
 import {Account} from "../../Types/Account";
@@ -26,7 +26,8 @@ export class LoginPage {
               public connectionProvider: ConnectionProvider,
               public settingsProvider: SettingsProvider,
               public minerProvider: MinerProvider,
-              public alertController: AlertController) {
+              public alertController: AlertController,
+              public events: Events) {
   }
 
   ionViewDidLoad() {
@@ -40,6 +41,7 @@ export class LoginPage {
       this.connectionProvider.login(this.settingsProvider.account).then(() => {
         this.connectionProvider.getStoredMiners().then(miners => {
           this.minerProvider.setMiners(miners).then(() => {
+            this.events.publish("initPush");
           }).catch(err => {
             console.log("error in setting miners ", err);
             this.alertController.create({
@@ -56,7 +58,6 @@ export class LoginPage {
             buttons: [{text: "ok"}]
           }).present();
           this.settingsProvider.saveAccount();
-          this.connectionProvider.initPushNotification(this.settingsProvider.account,this.settingsProvider.settings);
           this.navCtrl.setRoot(HomePage);
         })
       }).catch(err => {

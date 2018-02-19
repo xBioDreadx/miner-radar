@@ -5,6 +5,7 @@ import {ConnectionProvider} from "../../providers/connection/connection";
 import {MinerProvider} from "../../providers/miner/miner";
 import {MinerInfoPage} from "../miner-info/miner-info";
 import {ApplicationSettingsPage} from "../application-settings/application-settings";
+import {NativeStorage} from "@ionic-native/native-storage";
 
 
 @Component({
@@ -20,11 +21,8 @@ export class HomePage {
               public alertController:AlertController,
               public navParams:NavParams,
               public platform:Platform,
-              public nav:NavController) {
-this.platform.ready().then(()=>{
-
-})
-
+              public nav:NavController,
+              public nativeStorage:NativeStorage) {
   }
 
 
@@ -67,7 +65,7 @@ this.platform.ready().then(()=>{
 
   swipeEvent(e) {
     console.log("SWIPED!", e);
-    if (e.direction == 0) {
+    if (e.direction == 8) {
       this.updateInformation();
     }
   }

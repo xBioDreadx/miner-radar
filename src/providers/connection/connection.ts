@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {Network} from '@ionic-native/network';
 import 'rxjs/add/operator/map';
-import {AlertController, Platform, ToastController} from "ionic-angular";
+import {AlertController, Events, Platform, ToastController} from "ionic-angular";
 import {LoadingController} from 'ionic-angular';
 import {Push, PushObject, PushOptions} from "@ionic-native/push";
 import {LocalNotifications} from "@ionic-native/local-notifications";
@@ -11,6 +11,8 @@ import 'rxjs/add/operator/retry';
 import {ResponseInterface} from "../../Types/ResponseInterface";
 import {Account} from "../../Types/Account";
 import {Settings} from "../../Types/Settings";
+import {Miner} from "../../Types/Miner";
+import {NativeStorage} from "@ionic-native/native-storage";
 
 declare const Connection;
 
@@ -27,16 +29,17 @@ export class ConnectionProvider {
 
   public token: String;
   private connectionString = "http://smdom.ua.local:8080/";
+  pushObject: any = null;
 
   constructor(public network: Network,
               public loadingCtrl: LoadingController,
               public toastController: ToastController,
               public platform: Platform,
               public push: Push,
-              public localNotifications: LocalNotifications,
               public vibration: Vibration,
               public httpClient: HttpClient,
-              public alertController: AlertController) {
+              public alertController: AlertController,
+              public events: Events) {
 
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
@@ -119,7 +122,7 @@ export class ConnectionProvider {
    * @param {String} deviceID
    * @returns {Promise<any>}
    */
-  sendDeviceId(account: Account,deviceID: String): Promise<any> {
+  sendDeviceId(account: Account, deviceID: String): Promise<any> {
     return new Promise(resolve => {
       this.post(this.connectionString + "/setDeviceId", {
         username: account.username,
@@ -134,13 +137,14 @@ export class ConnectionProvider {
     })
   }
 
-  postMinersSettings(miner): Promise<any> {
+  postMinersSettings(account: Account, miner): Promise<any> {
     return new Promise((resolve, reject) => {
       if (this.isOnline()) {
         //this.presentLoading();
         this.post(this.connectionString + "/updateMinerSettings",
           {
-            token: this.token,
+            username: account.username,
+            password: account.password,
             minerId: miner.minerId,
             settings: miner.minerSettings
           }).then(answer => {
@@ -223,90 +227,7 @@ export class ConnectionProvider {
   }
 
 
-  initPushNotification(account: Account,settings: Settings): Promise<any> {
-    return new Promise((resolve, reject) => {
-      const options: PushOptions = {
-        android: {
-          senderID: "1034639132392"
-        },
-        ios: {
-          alert: 'true',
-          badge: false,
-          sound: 'true'
-        }
-      };
-
-      if (!this.platform.is('cordova')) {
-        console.warn('Push notifications not initialized. Cordova is not available - Run in physical device');
-        resolve(false);
-      }
-      else {
-        //TODO добавить проверку на существование, чтоб не слать каждый раз
-        this.push.hasPermission().then((res: any) => {
-          if (res.isEnabled) {
-            console.log('We have permission to send push notifications');
-            const pushObject: PushObject = this.push.init(options);
-            pushObject.on('registration').subscribe((data: any) => {
-              console.log('device token -> ' + data.registrationId);
-              this.sendDeviceId(account,data.registrationId);
-              //TODO - send device token to server
-            });
-
-            this.push.createChannel({
-              id: "miner-radar Notifications",
-              description: "Channel for sending warning messages from your miners",
-              // The importance property goes from 1 = Lowest, 2 = Low, 3 = Normal, 4 = High and 5 = Highest.
-              importance: 5
-            }).then(() => console.log('Channel created'));
 
 
-            pushObject.on('notification').subscribe((data: any) => {
-              console.log('message -> ' + data);
-              //if user using app and push notification comes
-              if (settings.vibration == true) {
-                if (this.platform.is('android'))
-                  this.vibration.vibrate([600, 200, 300, 200, 300, 200, 600]); //SOS on morze
-                else
-                  this.vibration.vibrate([1500])
-              }
-              if (settings.notification == true) {
-                this.localNotifications.schedule({
-                  id: Math.floor(Math.random() * (1000000000 - 1) + 1),
-                  title: data.title,
-                  text: data.message,
-                  sound: settings.sound == true && this.platform.is('android') ? 'res://platform_default' : null,
-                  badge: 1,
-                  icon: 'file://assets/icon/favicon.ico',
-                  smallIcon: 'file://assets/icon/favicon.ico'
-                });
-              }
-
-              if (data.additionalData.foreground) {
-                // if application open, show popup
-                //TODO: Your logic here
-                //data.message
-              } else {
-                //if user NOT using app and push notification comes
-                //TODO: Your logic on click of push notification directly
-                ///  this.nav.setRoot(HomePage);
-                console.log('Push notification clicked');
-              }
-            });
-            pushObject.on('error').subscribe(error => console.error('Error with Push plugin' + error));
-            resolve(true);
-          } else {
-            console.log('We do not have permission to send push notifications');
-            reject({err: "permission denied"})
-          }
-        }).catch(err => {
-          console.log("err in push init ", err);
-          reject({err: err})
-        });
-      }
-
-    });
-
-
-  }
 
 }

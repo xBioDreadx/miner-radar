@@ -14,7 +14,7 @@ export class Miner {
   public ethSwitches: Number;
   public dcrSwitches: Number;
   public version: String;
-  public status: Boolean;
+  public status: Boolean =false;
   public comments: String;
   public ethSpeed: Number;//'8.1 MH/s'
   public ethSharesAccepted: Number;

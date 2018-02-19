@@ -3,6 +3,7 @@ import {ActionSheetController, IonicPage, NavController, NavParams, ToastControl
 import {Miner} from "../../Types/Miner";
 import {MinerProvider} from "../../providers/miner/miner";
 import {ConnectionProvider} from "../../providers/connection/connection";
+import {SettingsProvider} from "../../providers/settings/settings";
 
 /**
  * Generated class for the MinerSettingsPage page.
@@ -25,6 +26,7 @@ export class MinerSettingsPage {
               public connectionProvider: ConnectionProvider,
               public toastController: ToastController,
               public actionSheetCtrl: ActionSheetController,
+              public settingsProvider:SettingsProvider,
               public zone: NgZone) {
     this.miner = this.navParams.get("miner");
   }
@@ -38,7 +40,7 @@ export class MinerSettingsPage {
   }
 
   ionViewWillLeave() {
-    this.connectionProvider.postMinersSettings(this.miner).then(() => {
+    this.connectionProvider.postMinersSettings(this.settingsProvider.account,this.miner).then(() => {
       this.toastController.create({
         message: "Successful updated settings",
         duration: 2500

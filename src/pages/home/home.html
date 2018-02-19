@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding (swipe)="swipeEvent($event)">
 
   <ion-card *ngFor="let miner of minerProvider.miners; let i = index" (click)="minerInfo(i)" class="miner_item">
 
