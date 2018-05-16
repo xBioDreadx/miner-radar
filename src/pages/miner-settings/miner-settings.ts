@@ -1,5 +1,5 @@
 import {Component, NgZone} from '@angular/core';
-import {ActionSheetController, IonicPage, NavController, NavParams, ToastController} from 'ionic-angular';
+import {ActionSheetController, IonicPage, Keyboard, NavController, NavParams, ToastController} from 'ionic-angular';
 import {Miner} from "../../Types/Miner";
 import {MinerProvider} from "../../providers/miner/miner";
 import {ConnectionProvider} from "../../providers/connection/connection";
@@ -26,18 +26,23 @@ export class MinerSettingsPage {
               public connectionProvider: ConnectionProvider,
               public toastController: ToastController,
               public actionSheetCtrl: ActionSheetController,
-              public settingsProvider:SettingsProvider,
-              public zone: NgZone) {
+              public settingsProvider: SettingsProvider,
+              public zone: NgZone,
+              public keyboard:Keyboard) {
     this.miner = this.navParams.get("miner");
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad MinerSettingsPage');
   }
 
-  cancel() {
-    this.navCtrl.pop();
+  deleteSetting(iter) {
+    this.zone.run(() => {
+      this.miner.minerSettings[iter].enabled = !this.miner.minerSettings[iter].enabled
+    });
   }
+
 
   ionViewWillLeave() {
     this.connectionProvider.postMinersSettings(this.settingsProvider.account,this.miner).then(() => {
@@ -54,6 +59,11 @@ export class MinerSettingsPage {
     })
   }
 
+  complete()
+  {
+    console.log("closed!")
+    this.keyboard.close();
+  }
 
 
 

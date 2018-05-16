@@ -6,6 +6,7 @@ import {MinerProvider} from "../../providers/miner/miner";
 import {MinerInfoPage} from "../miner-info/miner-info";
 import {ApplicationSettingsPage} from "../application-settings/application-settings";
 import {NativeStorage} from "@ionic-native/native-storage";
+import {LoginPage} from "../login/login";
 
 
 @Component({
@@ -40,7 +41,10 @@ export class HomePage {
           this.alertController.create({
             message: err,
             title: "Error while getting miners info",
-            buttons: [{text: "ok"}]
+            buttons: [{text: "ok",handler:()=>{
+              if(err=="Incorrect token")
+                this.nav.setRoot(LoginPage)
+            }}]
           }).present();
         })
       }).catch(err=>{

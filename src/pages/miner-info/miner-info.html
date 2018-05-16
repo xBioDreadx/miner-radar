@@ -113,9 +113,9 @@
     <ion-card-header class="additional_info_row">Pool</ion-card-header>
     <ion-card-content class="additional_info_content">{{miner.pool}}</ion-card-content>
   </ion-card>
-  <ion-card class="miner_info_card">
+  <ion-card  *ngIf="miner.comments!=''" class="miner_info_card">
     <ion-card-header class="additional_info_row">Comments</ion-card-header>
-    <ion-card-content class="additional_info_content">{{miner.comments}}</ion-card-content>
+    <ion-card-content  class="additional_info_content">{{miner.comments}}</ion-card-content>
   </ion-card>
 </ion-content>
 

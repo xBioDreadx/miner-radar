@@ -8,15 +8,23 @@
 
 
 <ion-content class="login_screen">
-  <ion-list class="transparent margin_list">
-      <ion-item class="transparent input_item">
-        <ion-input type="text" [(ngModel)]="username" placeholder="Username"></ion-input>
-      </ion-item>
-      <ion-item class="transparent input_item">
-        <ion-input type="password" [(ngModel)]="password" placeholder="Password"></ion-input>
-      </ion-item>
-      <ion-item class="transparent input_item">
-        <button ion-button (click)="login()" class="loginButton">Login</button>
-      </ion-item>
-  </ion-list>
+  <img src="assets/backgroundImages/Eth.png" class="ethLogo">
+  <ion-grid>
+    <ion-row>
+      <ion-col col-12 col-sm-12 offset-md-1 col-md-10  col-lg-8 offset-lg-2 class="margin_list">
+        <ion-list class="transparent ">
+          <ion-item class="transparent input_item">
+            <ion-input type="text" [(ngModel)]="username" placeholder="Username"></ion-input>
+          </ion-item>
+          <ion-item class="transparent input_item">
+            <ion-input type="password" [(ngModel)]="password" placeholder="Password"></ion-input>
+          </ion-item>
+          <ion-item class="transparent input_item">
+            <button ion-button (click)="login()" class="loginButton">Login</button>
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
 </ion-content>

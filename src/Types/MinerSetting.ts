@@ -4,9 +4,9 @@ export  class  MinerSetting{
  //включён ли параметр
   public enabled:boolean = false;
   //нижний порог срабатывания параметра, при -1 не срабатывает
-  public lowerLimit:number =-1;
+  public _lowerLimit:number =-1;
   //верхний порог срабатывания параметра, при -1 не срабатывает
-  public upperLimit: number = -1;
+  public _upperLimit: number = -1;
   //отключение нотификации
   public muted:boolean = false;
 
@@ -15,14 +15,17 @@ export  class  MinerSetting{
   //тип измерения параметра, нельзя изменить
   private _type:string;
 
+  private _id:number;
 
 
-  constructor(name:string,type:string,enabled: boolean,lowerLimit:number,upperLimit:number,minerId?:number) {
-    this._name= name
+
+  constructor(name:string,type:string,enabled: boolean,lowerLimit:number,upperLimit:number,id:number,minerId?:number) {
+    this._name= name;
     this._type= type;
+    this._id = id;
     this.enabled = enabled;
-    this.lowerLimit = lowerLimit;
-    this.upperLimit = upperLimit;
+    this._lowerLimit = lowerLimit;
+    this._upperLimit = upperLimit;
     if(minerId!==null)
     {
       this._minerId = minerId;
@@ -32,6 +35,11 @@ export  class  MinerSetting{
   get name():String
   {
     return this._name
+  }
+
+  get id():Number
+  {
+    return this._id
   }
 
   get type():String
@@ -46,4 +54,24 @@ export  class  MinerSetting{
   {
    this._name = name.replace("_","").toLowerCase();
   }
+
+  get lowerLimit():number
+  {
+    return (this._lowerLimit>-1)?this._lowerLimit:null
+  }
+  set lowerLimit( lowerLimit:number)
+  {
+    this._lowerLimit = lowerLimit
+  }
+
+
+  get upperLimit():number
+  {
+    return (this._upperLimit>-1)?this._upperLimit:null
+  }
+  set upperLimit( upperLimit:number)
+  {
+    this._upperLimit = upperLimit
+  }
+
 }

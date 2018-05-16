@@ -42,6 +42,7 @@ export class LoginPage {
         this.connectionProvider.getStoredMiners().then(miners => {
           this.minerProvider.setMiners(miners).then(() => {
             this.events.publish("initPush");
+            this.navCtrl.setRoot(HomePage)
           }).catch(err => {
             console.log("error in setting miners ", err);
             this.alertController.create({

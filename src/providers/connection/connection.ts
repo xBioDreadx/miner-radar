@@ -3,16 +3,10 @@ import {Network} from '@ionic-native/network';
 import 'rxjs/add/operator/map';
 import {AlertController, Events, Platform, ToastController} from "ionic-angular";
 import {LoadingController} from 'ionic-angular';
-import {Push, PushObject, PushOptions} from "@ionic-native/push";
-import {LocalNotifications} from "@ionic-native/local-notifications";
-import {Vibration} from "@ionic-native/vibration";
 import {HttpClient, HttpErrorResponse, HttpRequest, HttpEventType} from "@angular/common/http";
 import 'rxjs/add/operator/retry';
 import {ResponseInterface} from "../../Types/ResponseInterface";
 import {Account} from "../../Types/Account";
-import {Settings} from "../../Types/Settings";
-import {Miner} from "../../Types/Miner";
-import {NativeStorage} from "@ionic-native/native-storage";
 
 declare const Connection;
 
@@ -29,14 +23,11 @@ export class ConnectionProvider {
 
   public token: String;
   private connectionString = "http://smdom.ua.local:8080/";
-  pushObject: any = null;
 
   constructor(public network: Network,
               public loadingCtrl: LoadingController,
               public toastController: ToastController,
               public platform: Platform,
-              public push: Push,
-              public vibration: Vibration,
               public httpClient: HttpClient,
               public alertController: AlertController,
               public events: Events) {
@@ -168,6 +159,7 @@ export class ConnectionProvider {
   presentLoading(message = "Retrieving data...") {
     this.loader = this.loadingCtrl.create({
       content: message,
+      duration:10000,
     });
     this.loader.present();
   }

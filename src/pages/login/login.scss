@@ -1,19 +1,57 @@
 page-login {
   .login_screen {
-    background: -moz-linear-gradient(top, #d0e4f7 0%, #73b1e7 11%, #0a77d5 50%, #539fe1 85%, #87bcea 100%); /* FF3.6-15 */
-    background: -webkit-linear-gradient(top, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* Chrome10-25,Safari5.1-6 */
-    background: linear-gradient(to bottom, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    /* background: -moz-linear-gradient(top, #d0e4f7 0%, #73b1e7 11%, #0a77d5 50%, #539fe1 85%, #87bcea 100%); /* FF3.6-15 */
+    /*  background: -webkit-linear-gradient(top, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* Chrome10-25,Safari5.1-6 */
+    /*  background: linear-gradient(to bottom, #d0e4f7 0%,#73b1e7 11%,#0a77d5 50%,#539fe1 85%,#87bcea 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    background-image: url("../assets/backgroundImages/home.jpg");
+    background-position-x: center;
+    background-position-y: top;
+    background-size: cover;
   }
+  .loginButton {
+    background-color: map-get($colors, "secondary");
+  }
+  .input_item .text-input-md{
+    height: 30px;
+  }
+  .margin_list {
+    margin-top: 50px;
+    background-color: white;
+  /*  width: 95%;
+    margin-right: auto;
+    margin-left: auto;*/
+    border-radius: 10px;
+  }
+
+  .ethLogo
+  {
+    height: 25%;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+  }
+
+  @media screen and (orientation:portrait) {
+    .ethLogo
+    {
+      margin-top: 10%;
+    }
+  }
+
   .loginButton
   {
-    background-color:  map-get($colors,"secondary");
+    width: 150px;
+    height: 50px;
+    margin: 5px auto;
+    display:  block;
   }
-  .input_item
-  {
 
-  }
-  ion-list.margin_list
+  .margin_list .list-ios > .item-block:first-child,.margin_list .list-ios > .item-block:last-child
   {
-    margin-top: 33%;
+    border: none;
+  }
+  .margin_list .list-ios
+  {
+    margin: 0;
   }
 }

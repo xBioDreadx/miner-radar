@@ -166,7 +166,17 @@ export class MyApp {
                   message: data.message,
                   duration: 2500
                 }).present();
-
+                  this.connectionProvider.getStoredMiners().then(miners =>{
+                    this.minerProvider.setMiners(miners).then(() => {
+                    }).catch(err => {
+                      console.log("error in setting miners ", err);
+                      this.alertController.create({
+                        message: err,
+                        title: "Error while getting miners info",
+                        buttons: [{text: "ok"}]
+                      }).present();
+                    })
+                  });
               } else {
                 this.platform.ready().then(() => {
                   console.log('Push notification clicked');

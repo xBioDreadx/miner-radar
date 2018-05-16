@@ -16,7 +16,12 @@ page-home {
     color: #32db64;
   }
 
-
+  .homeContent
+  {
+    background-position-x: center;
+    background-position-y: center;
+    background-size: cover;
+  }
 
   .mainer_status {
     width: 25px;
