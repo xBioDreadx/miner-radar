@@ -110,4 +110,14 @@ page-miner-info {
   {
     background-color: whitesmoke;
   }
+
+  .fan-icon {
+    animation: fan 2s ease-in-out infinite;
+  }
+
+  @keyframes fan {
+    0% {transform:rotate(-45deg)}
+    50%{transform:rotate(-135deg)}
+    100%{transform:rotate(-225deg)}}
+
 }

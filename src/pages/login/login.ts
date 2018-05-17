@@ -41,21 +41,24 @@ export class LoginPage {
       this.connectionProvider.login(this.settingsProvider.account).then(() => {
         this.connectionProvider.getStoredMiners().then(miners => {
           this.minerProvider.setMiners(miners).then(() => {
+            //сохраняем акк после удачной авторизации
+            this.settingsProvider.saveAccount();
             this.events.publish("initPush");
             this.navCtrl.setRoot(HomePage)
           }).catch(err => {
             console.log("error in setting miners ", err);
             this.alertController.create({
               message: err,
-              title: "Error while getting miners info",
+              title: "Error while decoding miners info",
               buttons: [{text: "ok"}]
             }).present();
           })
+          //ошибка парсинга майнеров, но авторизация успешна
         }).catch(err => {
           console.log("error in setting miners ", err);
           this.alertController.create({
             message: err,
-            title: "Error while getting miners info",
+            title: "Error while retrieving miners info",
             buttons: [{text: "ok"}]
           }).present();
           this.settingsProvider.saveAccount();
@@ -63,17 +66,9 @@ export class LoginPage {
         })
       }).catch(err => {
         console.log("err on login");
+       //алерт был выведен функцией логина
       })
 
-      //делаем вид, что авторизуемся
-      /* this.loadingController.create({
-         content:'Authorization...',
-         spinner:'crescent',
-         dismissOnPageChange:true
-       }).present();
-       setTimeout(()=>{
-         this.navCtrl.push(HomePage);
-       },500)*/
     });
   }
 }
