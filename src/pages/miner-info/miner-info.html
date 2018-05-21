@@ -19,7 +19,7 @@
         <ion-col col-7><span class="temperature_span"><span class="temperature_graph" [ngStyle]="{'max-width': (gpu.temperature<110)?((100-((gpu.temperature/110)*100))+'%'):'0%' }"></span></span>
         </ion-col>
         <ion-col col-3>{{gpu.temperature}} °C</ion-col>
-        <ion-col col-1><ion-icon name="ios-thermometer-outline"></ion-icon></ion-col>
+        <ion-col col-1><ion-icon [ngClass]="{'hot':(gpu.temperature>miner.minerSettings[0].upperLimit&&(miner.minerSettings[0].upperLimit!=null)),'cold':(gpu.temperature<miner.minerSettings[0].lowerLimit&&(miner.minerSettings[0].lowerLimit!=null))}" name="ios-thermometer-outline" class="temperature_icon"></ion-icon></ion-col>
       </ion-row>
       <ion-row class="fan_row">
         <ion-col col-1></ion-col>

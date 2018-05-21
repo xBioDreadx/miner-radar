@@ -4,9 +4,9 @@ export  class  MinerSetting{
  //включён ли параметр
   public enabled:boolean = false;
   //нижний порог срабатывания параметра, при -1 не срабатывает
-  public _lowerLimit:number =-1;
+  public _lowerLimit:number =null;
   //верхний порог срабатывания параметра, при -1 не срабатывает
-  public _upperLimit: number = -1;
+  public _upperLimit: number = null;
   //отключение нотификации
   public muted:boolean = false;
 

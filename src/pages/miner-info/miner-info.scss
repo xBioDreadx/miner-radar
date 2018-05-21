@@ -18,8 +18,12 @@ page-miner-info {
     border-top: 1px solid #222222;
     border-bottom: 1px solid #222222;
   }
-  .alert_bg {
-    background-color: #ff1616;
+  .hot {
+    color: #ff1616;
+  }
+  .cold
+  {
+    color: #2c38e0;
   }
   .legend_row {
     background-color: whitesmoke;
@@ -111,13 +115,38 @@ page-miner-info {
     background-color: whitesmoke;
   }
 
-  .fan-icon {
-    animation: fan 2s ease-in-out infinite;
+  .fan-icon:before {
+    animation: fan 1s linear infinite;
+    width: 16px;
+    height: 16px;
+    padding-top: 3px;
+    padding-left: 1px;
   }
 
   @keyframes fan {
-    0% {transform:rotate(-45deg)}
-    50%{transform:rotate(-135deg)}
-    100%{transform:rotate(-225deg)}}
+    0% {
+      transform: rotate(-60deg)
+    }
+    20% {
+      transform: rotate(-120deg)
+    }
+    40% {
+      transform: rotate(-180deg)
+    }
+    60% {
+      transform: rotate(-240deg)
+    }
+    80% {
+      transform: rotate(-300deg)
+    }
+    100% {
+      transform: rotate(-360deg)
+    }
+  }
+
+  .temperature_icon
+  {
+    padding-left: 2px;
+  }
 
 }

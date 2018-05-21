@@ -7,6 +7,8 @@ import {HttpClient, HttpErrorResponse, HttpRequest, HttpEventType} from "@angula
 import 'rxjs/add/operator/retry';
 import {ResponseInterface} from "../../Types/ResponseInterface";
 import {Account} from "../../Types/Account";
+import {IConnectionQueueItem} from "../../Types/IConnectionQueueItem";
+import {SettingsProvider} from "../settings/settings";
 
 declare const Connection;
 
@@ -20,7 +22,8 @@ declare const Connection;
 export class ConnectionProvider {
 
   public loader: any;
-
+  public  connectionInProgress = false;
+  public  connectionQueue:Array<IConnectionQueueItem> = [];
   public token: String;
   private connectionString = "http://smdom.ua.local:8080/";
 
@@ -30,7 +33,8 @@ export class ConnectionProvider {
               public platform: Platform,
               public httpClient: HttpClient,
               public alertController: AlertController,
-              public events: Events) {
+              public events: Events,
+              public settingsProvider:SettingsProvider) {
 
 
     let connectSubscription = this.network.onConnect().subscribe(() => {
@@ -45,6 +49,18 @@ export class ConnectionProvider {
         }
       }, 3000);
     });
+  }
+
+  /**
+   * очередь выполняет 1 элемнт, и если есть ещё  запускает сама себя
+   */
+  processItemsForQueue()
+  {
+    if(this.connectionQueue.length>0)
+      this.connectionQueue.shift().main().then(()=>{
+      if(this.connectionQueue.length>0)
+        this.processItemsForQueue()
+      })
   }
 
   isOnline() {
@@ -80,7 +96,7 @@ export class ConnectionProvider {
         resolve(answer);
       }).catch(err => {
         this.cancelLoading();
-        this.alertController.create({message: err, title: "Error while login", buttons: [{text: "ok"}]}).present();
+        this.alertController.create({message: err, title: "Error during authorization", buttons: [{text: "ok"}]}).present();
         reject(err);
         console.log("err in retrieve ", err);
       })
@@ -97,6 +113,8 @@ export class ConnectionProvider {
 
       }).catch(err => {
         this.cancelLoading();
+        if(err=='Incorrect token')
+          this.login(this.settingsProvider.account);
         reject(err);
         console.log("err in retrieve ", err);
         console.log(err.status);

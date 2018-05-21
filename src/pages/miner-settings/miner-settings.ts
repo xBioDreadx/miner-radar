@@ -1,4 +1,4 @@
-import {Component, NgZone} from '@angular/core';
+import {Component, NgZone, SimpleChanges} from '@angular/core';
 import {ActionSheetController, IonicPage, Keyboard, NavController, NavParams, ToastController} from 'ionic-angular';
 import {Miner} from "../../Types/Miner";
 import {MinerProvider} from "../../providers/miner/miner";
@@ -64,7 +64,6 @@ export class MinerSettingsPage {
     console.log("closed!")
     this.keyboard.close();
   }
-
 
 
 

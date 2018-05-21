@@ -164,7 +164,7 @@ export class MyApp {
                 // this.getStoredMiners().then()
                 this.toastController.create({
                   message: data.message,
-                  duration: 2500
+                  duration: 3000
                 }).present();
                   this.connectionProvider.getStoredMiners().then(miners =>{
                     this.minerProvider.setMiners(miners).then(() => {
